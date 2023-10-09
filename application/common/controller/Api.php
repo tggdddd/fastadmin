@@ -11,7 +11,6 @@ use think\Lang;
 use think\Loader;
 use think\Request;
 use think\Response;
-use think\Route;
 use think\Validate;
 
 /**

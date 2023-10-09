@@ -3,6 +3,7 @@
 namespace app\common\controller;
 
 use app\admin\library\Auth;
+use fast\Tree;
 use think\Config;
 use think\Controller;
 use think\Hook;
@@ -10,7 +11,6 @@ use think\Lang;
 use think\Loader;
 use think\Model;
 use think\Session;
-use fast\Tree;
 use think\Validate;
 
 /**

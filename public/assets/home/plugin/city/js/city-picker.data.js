@@ -1,4 +1,3 @@
-
 /*!
  * Distpicker v1.3.2
  * https://github.com/tshi0912/city-picker

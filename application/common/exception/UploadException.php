@@ -3,7 +3,6 @@
 namespace app\common\exception;
 
 use think\Exception;
-use Throwable;
 
 class UploadException extends Exception
 {

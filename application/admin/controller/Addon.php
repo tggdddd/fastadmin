@@ -3,7 +3,6 @@
 namespace app\admin\controller;
 
 use app\common\controller\Backend;
-use fast\Http;
 use think\addons\AddonException;
 use think\addons\Service;
 use think\Cache;

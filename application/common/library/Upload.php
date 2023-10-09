@@ -8,7 +8,6 @@ use fast\Random;
 use FilesystemIterator;
 use think\Config;
 use think\File;
-use think\Hook;
 
 /**
  * 文件上传类

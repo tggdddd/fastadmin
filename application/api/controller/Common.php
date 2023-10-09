@@ -7,7 +7,6 @@ use app\common\exception\UploadException;
 use app\common\library\Upload;
 use app\common\model\Area;
 use app\common\model\Version;
-use fast\Random;
 use think\captcha\Captcha;
 use think\Config;
 use think\Hook;

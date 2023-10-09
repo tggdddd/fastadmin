@@ -10,7 +10,6 @@ use app\common\model\Attachment;
 use think\Config;
 use think\Cookie;
 use think\Hook;
-use think\Session;
 use think\Validate;
 
 /**

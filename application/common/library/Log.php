@@ -3,7 +3,6 @@
 namespace app\common\library;
 
 use Psr\Log\AbstractLogger;
-use think\Hook;
 
 /**
  * 日志记录类

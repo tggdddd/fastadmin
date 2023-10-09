@@ -5,7 +5,6 @@ namespace app\admin\controller\general;
 use app\common\controller\Backend;
 use app\common\library\Email;
 use app\common\model\Config as ConfigModel;
-use think\Cache;
 use think\Db;
 use think\Exception;
 use think\Validate;

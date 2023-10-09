@@ -3,8 +3,8 @@
 namespace app\admin\model;
 
 use app\admin\library\Auth;
-use think\Model;
 use think\Loader;
+use think\Model;
 
 class AdminLog extends Model
 {

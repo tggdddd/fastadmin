@@ -4,7 +4,6 @@ namespace app\common\behavior;
 
 use think\Config;
 use think\Lang;
-use think\Loader;
 
 class Common
 {

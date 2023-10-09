@@ -5,7 +5,6 @@ namespace app\api\controller;
 use app\common\controller\Api;
 use app\common\library\Ems as Emslib;
 use app\common\model\User;
-use think\Hook;
 
 /**
  * 邮箱验证码接口

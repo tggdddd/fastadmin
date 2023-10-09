@@ -5,7 +5,6 @@ namespace app\admin\controller;
 use app\common\controller\Backend;
 use app\common\exception\UploadException;
 use app\common\library\Upload;
-use fast\Random;
 use think\addons\Service;
 use think\Cache;
 use think\Config;

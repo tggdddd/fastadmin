@@ -14,10 +14,10 @@
 
 namespace fast;
 
-use think\Db;
 use think\Config;
-use think\Session;
+use think\Db;
 use think\Request;
+use think\Session;
 
 /**
  * 权限认证类

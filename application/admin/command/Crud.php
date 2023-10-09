@@ -11,7 +11,6 @@ use think\console\Output;
 use think\Db;
 use think\Exception;
 use think\exception\ErrorException;
-use think\exception\PDOException;
 use think\Lang;
 use think\Loader;
 
