@@ -6,7 +6,6 @@ use think\Model;
 
 class Source extends Model
 {
-    protected $table = 'fa_business_source';
-
+    protected $name = "business_source";
 
 }
