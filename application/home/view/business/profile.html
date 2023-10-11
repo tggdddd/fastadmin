@@ -1,95 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>修改个人资料</title>
-    <link href="__PUBLIC__assets/home/css/mui.min.css" rel="stylesheet">
-    <link href="__PUBLIC__assets/home/plugin/city/css/city-picker.css" rel="stylesheet">
-    <link href="__PUBLIC__assets/home/css/reset.css" rel="stylesheet">
-    <link href="__PUBLIC__assets/home/css/profile.css" rel="stylesheet">
-    <script src="__PUBLIC__assets/home/js/jquery-1.9.1.min.js"></script>
-    <script src="__PUBLIC__assets/home/js/mui.min.js"></script>
-    <script src="__PUBLIC__assets/home/plugin/city/js/city-picker.data.min.js"></script>
-    <script src="__PUBLIC__assets/home/plugin/city/js/city-picker.min.js"></script>
-</head>
-
+<link href="__PUBLIC__assets/home/plugin/city/css/city-picker.css" rel="stylesheet">
+<link href="__PUBLIC__assets/home/css/profile.css" rel="stylesheet">
+<script src="__PUBLIC__assets/home/plugin/city/js/city-picker.data.min.js"></script>
+<script src="__PUBLIC__assets/home/plugin/city/js/city-picker.min.js"></script>
 <body>
 <div class="user">
     <div class="avatar wow fadeInUp">
-        <img src="__PUBLIC__assets/home/images/avatar.jpg"/>
+        <img src="{$business.avatar_text}"/>
     </div>
 </div>
 
-<form class="mui-input-group">
+<form class="mui-input-group" method="post" enctype="multipart/form-data">
     <div class="mui-input-row">
         <label>昵称</label>
-        <input class="mui-input-clear" placeholder="请输入昵称" type="text">
+        <input class="mui-input-clear" name="nickname" value="{$business.nickname}" placeholder="请输入昵称" type="text">
     </div>
     <div class="mui-input-row">
         <label>手机号码</label>
-        <input class="mui-input-clear" placeholder="请输入手机号码" type="text">
+        <input class="mui-input-clear" name="mobile" value="{$business.mobile}"  placeholder="请输入手机号码" type="text">
     </div>
     <div class="mui-input-row">
         <label>邮箱</label>
-        <input class="mui-input-clear" placeholder="请输入邮箱" type="text">
+        <input class="mui-input-clear" name="email" value="{$business.email}"  placeholder="请输入邮箱" type="text">
     </div>
     <div class="mui-input-row">
         <label>密码</label>
-        <input class="mui-input-password" placeholder="请输入密码" type="password">
+        <input class="mui-input-password" name="password"  placeholder="请输入密码" type="password">
     </div>
     <div class="mui-input-row">
         <label>性别</label>
         <select name="gender">
-            <option value="0">保密</option>
-            <option value="1">男</option>
-            <option value="2">女</option>
+            <option value="0" {$business.gender|eq_return=0,'selected'}>保密</option>
+            <option value="1"{$business.gender|eq_return=1,'selected'}>男</option>
+            <option value="2"{$business.gender|eq_return=2,'selected'}>女</option>
         </select>
     </div>
     <div class="mui-input-row region">
         <label>地区</label>
         <div class="citypicker">
-            <input data-toggle="city-picker" id="city" name="region" readonly type="text"/>
+            <input data-toggle="city-picker" id="city" readonly type="text"/>
+            <input name="city" hidden="hidden">
+            <input name="province" hidden="hidden">
+            <input name="district" hidden="hidden">
         </div>
     </div>
 
     <input class="form-control" id="avatar" name="avatar" style="display: none;" type="file"/>
 
     <div class="mui-button-row">
-        <button class="mui-btn mui-btn-primary" type="button">确认</button>
+        <button class="mui-btn mui-btn-primary" type="submit">确认</button>
         <button class="mui-btn mui-btn-danger" onclick="history.go(-1)" type="button">返回</button>
     </div>
 </form>
 
 <!-- 底部 -->
-<div class="footer">
-    <nav class="footer-bar">
-        <div class="tab-item  mui-active">
-            <a href="index.html">
-                <span class="mui-icon mui-icon-home"></span>
-                <span class="mui-tab-label">首页</span>
-            </a>
-        </div>
-        <div class="tab-item">
-            <a href="search.html">
-                <span class="mui-icon mui-icon-search"></span>
-                <span class="mui-tab-label">搜索</span>
-            </a>
-        </div>
-        <div class="tab-item">
-            <a href="center.html">
-                <span class="mui-icon mui-icon-contact"></span>
-                <span class="mui-tab-label">我的</span>
-            </a>
-        </div>
-    </nav>
-</div>
+{include file="common/footer"}
 </body>
-</html>
 
 <script>
-    $('#city').citypicker({});
+    $('#city').citypicker({
+        province: '{$business.province_text}',
+        city: '{$business.city_text}',
+        district: '{$business.district_text}',
+    }).on("cp:updated",function (){
+        const citypicker = $(this).data("citypicker")
+        $("input[name='district']").val(citypicker.getCode("district"));
+        $("input[name='city']").val(citypicker.getCode("city"));
+        $("input[name='province']").val(citypicker.getCode("province"));
+    })
 
     //选择头像
     $('.avatar').click(function () {

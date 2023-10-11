@@ -22,11 +22,12 @@ class Business extends Validate
         'gender' => ['in:0,1,2'],
         'deal' => ['in:0,1'],
         'money' => ['number', '>=:0'],
-        'email' => ['email'],
+        'email' => ['email','unique:business'],
         'auth' => ['in:0,1']
     ];
     protected $scene = [
-        "register" => ["mobile", "password"]
+        "register" => ["mobile", "password"],
+        "profile" => ["mobile", "gender", "email"]
     ];
     /**
      * 设置错误的提醒信息
@@ -44,7 +45,8 @@ class Business extends Validate
         'deal.number' => '成交状态的类型有误',
         'deal.in' => '成交状态的值有误',
         'nickname.require' => '昵称必填',
-        'email.email' => '邮箱格式错误'
+        'email.email' => '邮箱格式错误',
+        'email.unique' => '邮箱已存在，请重新输入'
     ];
 }
 

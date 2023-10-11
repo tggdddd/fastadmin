@@ -1,145 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>微信平台视频付费系统</title>
-    <link href="__PUBLIC__assets/home/css/mui.min.css" rel="stylesheet"/>
-    <link href="__PUBLIC__assets/home/css/swiper-bundle.css" rel="stylesheet">
-    <link href="__PUBLIC__assets/home/css/reset.css" rel="stylesheet"/>
-    <link href="__PUBLIC__assets/home/css/index.css" rel="stylesheet"/>
-    <script src="__PUBLIC__assets/home/js/jquery-1.9.1.min.js"></script>
-    <script src="__PUBLIC__assets/home/js/mui.min.js"></script>
-    <script src="__PUBLIC__assets/home/js/swiper-bundle.min.js"></script>
-</head>
+<link href="__PUBLIC__assets/home/css/center.css" rel="stylesheet" />
 
 <body>
-<div class="mui-content">
-    <div class="swiper mySwiper">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <a href="">
-                    <img src="__PUBLIC__assets/home/images/video5.png">
-                    <p class="mui-slider-title">Javascript从零开始</p>
-                </a>
-            </div>
-            <div class="swiper-slide">
-                <a href="">
-                    <img src="__PUBLIC__assets/home/images/video3.png">
-                    <p class="mui-slider-title">Javascript从零开始1111</p>
-                </a>
-            </div>
-            <div class="swiper-slide">
-                <a href="">
-                    <img src="__PUBLIC__assets/home/images/video2.png">
-                    <p class="mui-slider-title">Javascript从零开始222</p>
-                </a>
-            </div>
-        </div>
-        <div class="swiper-pagination" style="text-align: right;"></div>
+<!-- 头部 -->
+<div class="user">
+    <div class="avatar wow fadeInUp">
+        <img src="{$business.avatar_text}" />
     </div>
+
+    <div class="nickname wow fadeInUp" data-wow-delay="100ms">{$business.nickname}</div>
 </div>
 
-<div class="mui-content">
-    <h5 class="title">精选课程</h5>
-    <ul class="mui-table-view mui-grid-view">
-        <li class="mui-table-view-cell mui-media mui-col-xs-6">
-            <a href="details.html">
-                <div class="imgs">
-                    <img class="mui-media-object" src="__PUBLIC__assets/home/images/video6.png">
-                </div>
-                <div class="mui-media-body">Java基础视频</div>
-            </a>
-        </li>
-        <li class="mui-table-view-cell mui-media mui-col-xs-6">
-            <a href="details.html">
-                <div class="imgs">
-                    <img class="mui-media-object" src="__PUBLIC__assets/home/images/video2.png">
-                </div>
-                <div class="mui-media-body">.Net基础视频</div>
-            </a>
-        </li>
-        <li class="mui-table-view-cell mui-media mui-col-xs-6">
-            <a href="details.html">
-                <div class="imgs">
-                    <img class="mui-media-object" src="__PUBLIC__assets/home/images/video.jpg">
-                </div>
-                <div class="mui-media-body">Java基础视频</div>
-            </a>
-        </li>
-        <li class="mui-table-view-cell mui-media mui-col-xs-6">
-            <a href="details.html">
-                <div class="imgs">
-                    <img class="mui-media-object" src="__PUBLIC__assets/home/images/video2.png">
-                </div>
-                <div class="mui-media-body">.Net基础视频</div>
-            </a>
-        </li>
-        <li class="mui-table-view-cell mui-media mui-col-xs-6">
-            <a href="details.html">
-                <div class="imgs">
-                    <img class="mui-media-object" src="__PUBLIC__assets/home/images/video6.png">
-                </div>
-                <div class="mui-media-body">Java基础视频</div>
-            </a>
-        </li>
-        <li class="mui-table-view-cell mui-media mui-col-xs-6">
-            <a href="details.html">
-                <div class="imgs">
-                    <img class="mui-media-object" src="__PUBLIC__assets/home/images/video2.png">
-                </div>
-                <div class="mui-media-body">.Net基础视频</div>
-            </a>
-        </li>
-        <li class="mui-table-view-cell mui-media mui-col-xs-6">
-            <a href="details.html">
-                <div class="imgs">
-                    <img class="mui-media-object" src="__PUBLIC__assets/home/images/video.jpg">
-                </div>
-                <div class="mui-media-body">Java基础视频</div>
-            </a>
-        </li>
-        <li class="mui-table-view-cell mui-media mui-col-xs-6">
-            <a href="details.html">
-                <div class="imgs">
-                    <img class="mui-media-object" src="__PUBLIC__assets/home/images/video2.png">
-                </div>
-                <div class="mui-media-body">.Net基础视频</div>
-            </a>
-        </li>
-    </ul>
+<!-- 菜单 -->
+<div class="menulist wow fadeInUp" data-wow-delay="300ms">
+    <a href="profile.html" class="item">
+        <span>基本资料</span>
+        <img src='__PUBLIC__assets/home/images/row.png' />
+    </a>
+    {if condition="!$business.auth"}
+    <a href="{:url('/home/business/email')}" class="item">
+        <span>邮箱认证</span>
+        <img src='__PUBLIC__assets/home/images/row.png' />
+    </a>
+    {/if}
+    <a href="order.html" class="item">
+        <span>我的订单</span>
+        <img src='__PUBLIC__assets/home/images/row.png' />
+    </a>
+    <a href="record.html" class="item">
+        <span>我的消费</span>
+        <img src='__PUBLIC__assets/home/images/row.png' />
+    </a>
+    <a href="recharge.html" class="item">
+        <span>充值</span>
+        <img src='__PUBLIC__assets/home/images/row.png' />
+    </a>
+    <a href="contact.html" class="item">
+        <span>联系我们</span>
+        <img src='__PUBLIC__assets/home/images/row.png' />
+    </a>
+    <a id="logout" href="javascript:void(0)" class="item">
+        <span>退出</span>
+        <img src='__PUBLIC__assets/home/images/row.png' />
+    </a>
 </div>
+
 
 <!-- 底部 -->
-<div class="footer">
-    <nav class="footer-bar">
-        <div class="tab-item  mui-active">
-            <a href="index.html">
-                <span class="mui-icon mui-icon-home"></span>
-                <span class="mui-tab-label">首页</span>
-            </a>
-        </div>
-        <div class="tab-item">
-            <a href="search.html">
-                <span class="mui-icon mui-icon-search"></span>
-                <span class="mui-tab-label">搜索</span>
-            </a>
-        </div>
-        <div class="tab-item">
-            <a href="center.html">
-                <span class="mui-icon mui-icon-contact"></span>
-                <span class="mui-tab-label">我的</span>
-            </a>
-        </div>
-    </nav>
-</div>
+{include file="common/footer"/}
 </body>
-</html>
+
 <script>
-    var swiper = new Swiper(".mySwiper", {
-        pagination: {
-            el: ".swiper-pagination",
-        },
-    });
+    $('#logout').click(() => {
+        mui.confirm(
+            '是否确认退出',
+            '退出提醒',
+            ['确认','取消'],
+            function(res)
+            {
+                if(res.index === 0)
+                {
+                    mui.toast('退出成功')
+
+                    // 关闭当前窗口
+                    $('.mui-popup-backdrop').remove()
+                    $('.mui-popup').remove()
+
+                    setTimeout(() => {
+                        location.href = '{:url(\'home/index/login\')}'
+                    }, 500)
+                }
+            }
+        )
+    })
 </script>

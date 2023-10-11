@@ -32,9 +32,9 @@ if (!function_exists('format_bytes')) {
 
     /**
      * 将字节转换为可读文本
-     * @param int    $size      大小
+     * @param int $size 大小
      * @param string $delimiter 分隔符
-     * @param int    $precision 小数位数
+     * @param int $precision 小数位数
      * @return string
      */
     function format_bytes($size, $delimiter = '', $precision = 2)
@@ -51,7 +51,7 @@ if (!function_exists('datetime')) {
 
     /**
      * 将时间戳转换为日期时间
-     * @param int    $time   时间戳
+     * @param int $time 时间戳
      * @param string $format 日期时间格式
      * @return string
      */
@@ -66,7 +66,7 @@ if (!function_exists('human_date')) {
 
     /**
      * 获取语义化时间
-     * @param int $time  时间
+     * @param int $time 时间
      * @param int $local 本地时间
      * @return string
      */
@@ -133,8 +133,8 @@ if (!function_exists('rmdirs')) {
 
     /**
      * 删除文件夹
-     * @param string $dirname  目录
-     * @param bool   $withself 是否删除自身
+     * @param string $dirname 目录
+     * @param bool $withself 是否删除自身
      * @return boolean
      */
     function rmdirs($dirname, $withself = true)
@@ -163,7 +163,7 @@ if (!function_exists('copydirs')) {
     /**
      * 复制文件夹
      * @param string $source 源文件夹
-     * @param string $dest   目标文件夹
+     * @param string $dest 目标文件夹
      */
     function copydirs($source, $dest)
     {
@@ -199,7 +199,7 @@ if (!function_exists('addtion')) {
 
     /**
      * 附加关联字段数据
-     * @param array $items  数据列表
+     * @param array $items 数据列表
      * @param mixed $fields 渲染的来源字段
      * @return array
      */
@@ -272,7 +272,7 @@ if (!function_exists('var_export_short')) {
 
     /**
      * 使用短标签打印或返回数组结构
-     * @param mixed   $data
+     * @param mixed $data
      * @param boolean $return 是否返回数据
      * @return string
      */
@@ -535,7 +535,7 @@ if (!function_exists('build_suffix_image')) {
     /**
      * 生成文件后缀图片
      * @param string $suffix 后缀
-     * @param null   $background
+     * @param null $background
      * @return string
      */
     function build_suffix_image($suffix, $background = null)
@@ -595,5 +595,31 @@ if (!function_exists('randstr')) {
             $str .= $chars[mt_rand(0, $charsLen)];    //随机取出一位
         }
         return $str;
+    }
+}
+if (!function_exists("upload_simple")) {
+    function upload_simple($file, $path = ROOT_PATH . "public/upload/",$includePath=false): array
+    {
+        $info = $file->move($path);
+        if ($info) {
+            return [
+                "success" => true,
+                "error" => "",
+                "path" =>$includePath?(realpath($path . $info->getSaveName())):"/upload/".(str_replace("\\","/",$info->getSaveName()))
+            ];
+        }
+        return [
+            "success" => false,
+            "error" => $info->getError(),
+            "path" => ""
+        ];
+    }
+}
+
+
+
+if(!function_exists('eq_return')){
+    function eq_return($value,$value2,$return,$else=""){
+        return $value==$value2?$return:$else;
     }
 }
