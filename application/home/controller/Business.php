@@ -45,6 +45,9 @@ class Business extends Home
             if (empty($data['district'])) {
                 unset($data['district']);
             }
+            if ($data['email'] != $this->view->business['email']) {
+                $data['auth'] = 0;
+            }
             $result = $this->business_model->isUpdate()->allowField(true)->save($data);
             if ($result) {
                 if (!empty($avatar)) {
@@ -52,9 +55,9 @@ class Business extends Home
                     is_file($path) and @unlink($path);
                 }
                 cookie("business", ['mobile' => $data['mobile'], "id" => $data['id']]);
-                $this->success("保存成功", url("business/profile"));
+                $this->success("保存成功", url("business/index"));
             }
-            $this->error($this->business_model->getError());
+            $this->error("更新失败 " . $this->business_model->getError());
         }
         return $this->fetch();
     }
