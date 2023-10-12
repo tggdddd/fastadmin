@@ -1,0 +1,107 @@
+<link href="__PUBLIC__assets/home/css/search.css" rel="stylesheet">
+<link href="__PUBLIC__assets/home/plugin/mescroll/mescroll.min.css" rel="stylesheet">
+<script src="__PUBLIC__assets/home/plugin/mescroll/mescroll.min.js"></script>
+<body>
+<!-- 搜索框 -->
+<div class="mui-input-row mui-search">
+    <input class="mui-input-clear" name="search" placeholder="请输入课程名称" type="search"/>
+</div>
+
+<!-- 课程列表 -->
+<div class="mescroll" id="mescroll">
+    <ul class="mui-table-view" id="list-data">
+    </ul>
+</div>
+
+<!-- 底部 -->
+{include file="common/footer" /}
+</body>
+<script>
+    let search = ""
+    const container = $("#list-data")
+    var mescroll = new MeScroll("mescroll", {
+        down: {
+            callback: downCallback
+        },
+        up: {
+            callback: upCallback,
+            page: {
+                num: 0,
+                size: 20
+            },
+            auto: true,
+            htmlNodata: '<div class="more">没有更多了..</div>',
+            // noMoreSize: 5,
+            isBounce: false,
+            toTop: {
+                src: "__PUBLIC__assets/home/plugin/mescroll/mescroll-totop.png",
+                offset: 100,
+                duration: 600
+            }
+        }
+    });
+    $("input[name='search']").on("change", function () {
+        search = $(this).val()
+        downCallback()
+    })
+
+    function downCallback() {
+        mescroll.resetUpScroll()
+        container.empty()
+    }
+
+    function upCallback(page) {
+        const pageNo = page.num;
+        const limit = page.size;
+        $.ajax({
+            url: "{:url('home/index/search')}",
+            type: "post",
+            dataType: "json",
+            data: {
+                search: search,
+                page: pageNo,
+                limit: limit
+            },
+            success: function (data) {
+                if (data.code) {
+                    const curPageData = data.data.list;
+                    const totalSize = data.data.count;
+                    mescroll.endBySize(curPageData.length, totalSize);
+                    renderListData(curPageData);
+                } else {
+                    mui.toast("暂无更多数据")
+                    mescroll.endBySize(0, 0);
+                }
+            },
+            error: function (e) {
+                console.error(e)
+                mescroll.endErr();
+            }
+        });
+    }
+
+    function renderListData(list) {
+        for (const item of list) {
+            container.append(
+                `<li class="mui-table-view-cell mui-media">
+            <a class="item" href="{:url('home/index/info')}?pid=${item.id}">
+                <div class="thumb">
+                    <img class="img" src="${item.thumbs_text}">
+                </div>
+                <div class="info">
+                    <h5 class="title">${item.title}</h5>
+                    <p class="content mui-ellipsis">课程分类：${item.category.name}</p>
+                    <p class="content mui-ellipsis">创建时间：${item.createtime_text}</p>
+                    <p class="bottom">
+                        <span class="like mui-icon mui-icon-starhalf">
+                            <span>${item.likes_text}</span>
+                        </span>
+                        <span class="price">￥${item.price}</span>
+                    </p>
+                </div>
+            </a>
+        </li>`
+            )
+        }
+    }
+</script>

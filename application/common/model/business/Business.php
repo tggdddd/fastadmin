@@ -16,7 +16,7 @@ class Business extends Model
         'district_text'
     ];
     public function getAvatarTextAttr($value,$data){
-        if(empty($data['avatar'])){
+        if (empty($data['avatar']) || !is_file(ROOT_PATH . 'public' . $data['avatar'])) {
             return "/assets/img/avatar.png";
         }
         return $data['avatar'];

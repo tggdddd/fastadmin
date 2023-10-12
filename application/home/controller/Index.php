@@ -12,10 +12,37 @@ class Index extends Controller
     {
         parent::__construct($request);
         $this->business_model = model("common/business/Business");
+        $this->subject_model = model("common/subject/Subject");
     }
 
     public function index()
     {
+//        轮播图
+        $carousel = $this->subject_model->order("createtime desc")->limit(5)->select();
+//        最近课程列表
+        $list = $this->subject_model->order("id desc")->limit(8)->select();
+        $this->assign([
+            'carousel' => $carousel,
+            'list' => $list
+        ]);
+        return $this->view->fetch();
+    }
+
+    public function search()
+    {
+        if ($this->request->isAjax()) {
+            $search = $this->request->param("search", "", "trim");
+            $limit = $this->request->param("limit", "10", "trim");
+            $page = $this->request->param("page", "1", "trim");
+            $where = [];
+            !empty($search) and $where['title'] = ["like", "%$search%"];
+            $count = $this->subject_model->where($where)->count();
+            $list = $this->subject_model->where($where)->with("category")->order('createtime desc')->page($page, $limit)->select();
+            if (empty($list)) {
+                $this->error("没有更多数据");
+            }
+            $this->success("获取成功", null, ["count" => $count, "list" => $list]);
+        }
         return $this->view->fetch();
     }
 
@@ -27,7 +54,7 @@ class Index extends Controller
             $data = $this->business_model->where("mobile", "=", $mobile)->find();
             empty($data) and $this->error("用户不存在");
             md5($password . $data['salt']) != $data['password'] and $this->error("密码错误");
-            cookie("business",['mobile'=>$mobile,"id"=>$data['id']]);
+            cookie("business", ['mobile' => $mobile, "id" => $data['id']]);
             $this->success("登录成功", url("home/index/index"));
         }
         return $this->view->fetch();
