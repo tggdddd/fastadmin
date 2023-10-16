@@ -1,0 +1,236 @@
+<link href="__PUBLIC__assets/home/css/details.css" rel="stylesheet">
+<!-- 加载ckplayer视频插件 -->
+<script src="__PUBLIC__assets/home/plugin/ckplayer/ckplayer.min.js"></script>
+<style>
+    .list-chapter {
+        /*background: repeating-linear-gradient(146deg, transparent 11px, transparent 12px, #00000036 12px, #00000000 24px);*/
+        text-shadow: 1px 1px #ffffff33, -1px -1px #ffffff33, 0 0 3px #a1c17756;
+    }
+
+    .list-chapter span.right {
+        float: right;
+        color: #0afef2;
+        animation: rotate 7s linear infinite;
+    }
+
+    .list-chapter span.left {
+        float: left;
+        width: 6px;
+        height: 6px;
+        background: #000;
+        border-radius: 2px;
+        margin-top: .5em;
+        margin-right: .5em;
+    }
+
+    @keyframes rotate {
+        from {
+            rotate: 0;
+        }
+        to {
+            rotate: 360deg;
+        }
+    }
+</style>
+<body>
+<div id="cover">
+    <!-- 课程封面 -->
+    <img class="cover_bg" src="{$subject.thumbs_text}">
+    <!-- 中间播放键 -->
+    <div id="play">
+        <img src="__PUBLIC__assets/home/images/play.png"/>
+    </div>
+</div>
+
+<!-- ckplayer视频容器元素 -->
+<div id="video"></div>
+
+<!-- 课程信息 -->
+<div class="head">
+    <div class="info">
+        <h4 class="name">{$subject.title}</h4>
+        <div class="action">
+            {if condition="$likeStatus"}
+            <!-- 已点赞 -->
+            <img alt="" class="thumbs" data-add="__PUBLIC__assets/home/images/thumbs.png"
+                 data-remove="__PUBLIC__assets/home/images/thumbs-up.png" data-status="remove"
+                 id="like" src="__PUBLIC__assets/home/images/thumbs-up.png">
+            {else/}
+            <!-- 未点赞 -->
+            <img alt="" class="thumbs" data-add="__PUBLIC__assets/home/images/thumbs.png"
+                 data-remove="__PUBLIC__assets/home/images/thumbs-up.png" data-status="add"
+                 id="like" src="__PUBLIC__assets/home/images/thumbs.png">
+            {/if}
+            <span class="num" id="likeNum">{$subject.likes_text}</span>
+        </div>
+    </div>
+</div>
+
+<div class="title">课程章节</div>
+<table class="list">
+    <tr>
+        <td>课程名称</td>
+        <td>{$subject.title}</td>
+    </tr>
+    <tr class="price">
+        <td>课程价格</td>
+        <td>￥{$subject.price}元</td>
+    </tr>
+    <tr>
+        <td>发布时间</td>
+        <td>{$subject.createtime_text}</td>
+    </tr>
+    <tr>
+        <td>章节总数</td>
+        <td>{$chapters|count}小节</td>
+    </tr>
+</table>
+
+<div class="title">课程介绍</div>
+<div class="mui-table-view content">{$subject.content}</div>
+
+<div class="title">课程章节</div>
+<ul class="mui-table-view">
+    {if condition="$chapters"}
+    {foreach $chapters as $key=>$item}
+    <li class="mui-table-view-cell list-chapter" data-id="{$item.id}"
+        onclick="Paydata({$key})">
+        第{$key + 1}节 - {$item.title}
+        <span class="left"></span>
+        <span class="mui-icon mui-icon-spinner mui-spin right"></span>
+    </li>
+    {/foreach}
+    {else /}
+    <li class="mui-table-view-cell">暂无课程章节</li>
+    {/if}
+</ul>
+
+<div class="title">用户评论</div>
+
+<!-- 评论内容 -->
+<ul class="mui-table-view">
+    {foreach $comments as $key=>$item}
+    <li class="mui-table-view-cell mui-media">
+        <a href="javascript:;">
+            <img class="mui-media-object mui-pull-left userimg" src="{$item.business.avatar_text}">
+            <div class="mui-media-body">
+                {$item.business.nickname??"匿名"}
+                <p class='mui-ellipsis'>{$item.content}</p>
+            </div>
+        </a>
+    </li>
+    {/foreach}
+</ul>
+{if condition="$moreComment" /}
+<div class="more">
+    <a class="mui-btn mui-btn-primary mui-btn-outlined" href="{:url('home/index/comment_list',['pid'=>$subject.id])}">查看更多评论</a>
+</div>
+{else /}
+<div class="more">
+    <div class="mui-btn mui-btn mui-btn-outlined"
+         style="border:none!important;outline: none !important;color:#00000066!important;">没有更多评论了
+    </div>
+</div>
+{/if}
+<!-- 弹出菜单 -->
+<div class="mui-popover mui-popover-bottom mui-popover-action" id="sheet1">
+    <!-- 可选择菜单 -->
+    <ul class="mui-table-view">
+        <li class="mui-table-view-cell">
+            <a href="javascript:void(0)" id="buy">
+                立即购买
+            </a>
+        </li>
+    </ul>
+    <!-- 取消菜单 -->
+    <ul class="mui-table-view">
+        <li class="mui-table-view-cell">
+            <a href="#sheet1"><b>取消</b></a>
+        </li>
+    </ul>
+</div>
+
+<!-- 底部 -->
+{include file="common/footer"}
+</body>
+
+<script>
+    let chapter = null;
+
+    $("#iosActionsheetCancel").click(function () {
+        mui('#sheet1').popover('toggle');
+    })
+
+    // 点击播放
+    $("#play").on('click', function () {
+        Paydata(0)
+    })
+
+    function Paydata(index) {
+        {
+            if condition = "$shouldBuy"
+        }
+        mui('#sheet1').popover('toggle');
+        {else
+            /}
+            const videoUrl = [
+                {foreach $chapters as $item}
+                "{$item.url}",
+                {/foreach}
+            ]
+            if (index >= videoUrl.length) {
+                mui.toast("暂无视频");
+                return
+            }
+            var videoObject = {
+                container: '#video',
+                video: videoUrl[index],
+                autoplay: true
+            }
+            new ckplayer(videoObject);
+            $("#cover").hide()
+            $("#video").show()
+            $('html, body').animate({scrollTop: 0}, 'fast');
+            {
+                /if}
+            }
+
+            $("#buy").on('click', function () {
+                mui('#sheet1').popover('toggle');
+                var btnArray = ['否', '是'];
+                mui.confirm('请问您确认购买吗？', '尊敬的用户', btnArray, function (e) {
+                    if (e.index === 1) {
+                        $.ajax({
+                            url: "{:url('home/index/buy',['subid'=>$subject.id])}",
+                            type: "post",
+                            success: function (res) {
+                                mui.toast(res.msg)
+                                if (res.code) {
+                                    location.href = "{:url('home/index/buy',['subid'=>$subject.id])}"
+                                }
+                            }
+                        })
+                    }
+                })
+            })
+            $("#like").on('click', function () {
+                const subId = "{$subject.id}"
+                const status = $(this).data("status")
+                console.log(status)
+                $.ajax({
+                    url: "{:url('home/index/like')}",
+                    type: "post",
+                    data: {status: status, pid: subId},
+                    dataType: "json"
+                }).then(res => {
+                    if (res.code) {
+                        $("#likeNum").text(res.data)
+                        const t = status === "add" ? "remove" : "add"
+                        $(this).attr("src", $(this).data(t))
+                        $(this).data("status", t)
+                    }
+                    mui.toast(res.msg, {duration: 500})
+                })
+            })
+
+</script>

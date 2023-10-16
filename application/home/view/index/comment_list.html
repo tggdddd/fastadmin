@@ -1,0 +1,92 @@
+<link href="__PUBLIC__assets/home/css/details.css" rel="stylesheet">
+<link href="__PUBLIC__assets/home/plugin/mescroll/mescroll.min.css" rel="stylesheet">
+<script src="__PUBLIC__assets/home/plugin/mescroll/mescroll.min.js"></script>
+<body>
+<div class="mescroll" id="mescroll">
+    <ul class="mui-table-view" id="list-data">
+    </ul>
+</div>
+</body>
+
+
+<script>
+    const container = $("#list-data")
+    var mescroll = new MeScroll("mescroll", {
+        down: {
+            callback: downCallback
+        },
+        up: {
+            callback: upCallback,
+            page: {
+                num: 0,
+                size: 20
+            },
+            auto: true,
+            htmlNodata: '<div class="more">没有更多了..</div>',
+            // noMoreSize: 5,
+            isBounce: false,
+            toTop: {
+                src: "__PUBLIC__assets/home/plugin/mescroll/mescroll-totop.png",
+                offset: 100,
+                duration: 600
+            }
+        }
+    });
+
+    function downCallback() {
+        mescroll.resetUpScroll()
+        container.empty()
+    }
+
+    function upCallback(page) {
+        const pageNo = page.num;
+        const limit = page.size;
+        $.ajax({
+            url: "{:url('home/index/comment_list')}",
+            type: "post",
+            dataType: "json",
+            data: {
+                page: pageNo,
+                limit: limit,
+                pid: {$pid}
+            },
+            success: function (data) {
+                if (data.code) {
+                    const curPageData = data.data.list;
+                    const totalSize = data.data.count;
+                    mescroll.endBySize(curPageData.length, totalSize);
+                    renderListData(curPageData);
+                } else {
+                    mui.toast("暂无更多数据")
+                    mescroll.endBySize(0, 0);
+                }
+            },
+            error: function (e) {
+                console.error(e)
+                mescroll.endErr();
+            }
+        });
+    }
+
+    function htmlToText(html) {
+        return html.replace(/<.*?>/g, "")
+    }
+
+    function renderListData(list) {
+        for (let item of list) {
+            let html = `
+                 <li class="mui-table-view-cell mui-media">
+                <a href="javascript:;">
+                <img class="mui-media-object mui-pull-left userimg" src="${item.business.avatar_text}">
+                <div class="mui-media-body">
+                    ${item.business.nickname ?? "匿名"}
+                    <p class='mui-ellipsis'>${item.content}</p>
+                </div>
+            </a>
+        </li>
+            `
+            container.append(html)
+        }
+
+    }
+</script>

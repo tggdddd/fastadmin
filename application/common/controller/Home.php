@@ -13,6 +13,14 @@ class Home extends Controller{
      */
     protected $noNeedLogin = [];
     protected $business_model;
+    protected $beforeActionList = [
+        "menu_index"
+    ];
+
+    public function menu_index()
+    {
+        $this->assign("menu_index", $this->request->param("menu_index", "0"));
+    }
     public function __construct(Request $request = null)
     {
         parent::__construct($request);

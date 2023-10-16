@@ -1,0 +1,20 @@
+<link href="__PUBLIC__assets/home/css/recharge.css" rel="stylesheet"/>
+
+<body>
+<form class="mui-input-group" method="post">
+    <div class="mui-input-row">
+        <label class="title">当前余额(￥)：</label>
+        <input readonly type="number" value="1"/>
+    </div>
+    <div class="mui-input-row">
+        <label class="title">充值金额(￥)：</label>
+        <input class="mui-input-clear money" min="1" name="money" placeholder="请输入充值金额" required type="number"/>
+    </div>
+
+    <!--立即充值-->
+    <button class="mui-btn mui-btn-primary mui-btn-outlined btn" type="submit">立即充值</button>
+</form>
+
+<!-- 底部 -->
+{include file="common/footer" /}
+</body>

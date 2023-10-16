@@ -1,6 +1,6 @@
 <?php
 
-namespace app\common\validate;
+namespace app\common\validate\business;
 
 use think\Validate;
 

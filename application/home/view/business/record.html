@@ -1,0 +1,106 @@
+<link href="__PUBLIC__assets/home/css/order.css" rel="stylesheet"/>
+<link href="__PUBLIC__assets/home/plugin/mescroll/mescroll.min.css" rel="stylesheet">
+<script src="__PUBLIC__assets/home/plugin/mescroll/mescroll.min.js"></script>
+
+<body>
+<div class="page__bd">
+    <div class="weui-tab">
+        <div class="mescroll" id="mescroll">
+            <div class="weui-tab__panel" id="list-data">
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+<script>
+    const container = $("#list-data")
+    var mescroll = new MeScroll("mescroll", {
+        down: {
+            callback: downCallback
+        },
+        up: {
+            callback: upCallback,
+            page: {
+                num: 0,
+                size: 20
+            },
+            auto: true,
+            htmlNodata: '<div class="more">没有更多了..</div>',
+            // noMoreSize: 5,
+            isBounce: false,
+            toTop: {
+                src: "__PUBLIC__assets/home/plugin/mescroll/mescroll-totop.png",
+                offset: 100,
+                duration: 600
+            }
+        }
+    });
+
+    function downCallback() {
+        mescroll.resetUpScroll()
+        container.empty()
+    }
+
+    function upCallback(page) {
+        const pageNo = page.num;
+        const limit = page.size;
+        $.ajax({
+            url: "{:url('home/business/record')}",
+            type: "post",
+            dataType: "json",
+            data: {
+                page: pageNo,
+                limit: limit
+            },
+            success: function (data) {
+                if (data.code) {
+                    const curPageData = data.data.list;
+                    const totalSize = data.data.count;
+                    mescroll.endBySize(curPageData.length, totalSize);
+                    renderListData(curPageData);
+                } else {
+                    mui.toast("暂无更多数据")
+                    mescroll.endBySize(0, 0);
+                }
+            },
+            error: function (e) {
+                console.error(e)
+                mescroll.endErr();
+            }
+        });
+    }
+
+    function htmlToText(html) {
+        return html.replace(/<.*?>/g, "")
+    }
+
+    function renderListData(list) {
+        for (let item of list) {
+            let html = `
+                <div class="weui-form-preview">
+                    <div class="weui-form-preview__hd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">消费金额</label>
+                            <em class="weui-form-preview__value">¥${item.total}</em>
+                        </div>
+                    </div>
+                    <div class="weui-form-preview__bd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">消费描述</label>
+                            <span class="weui-form-preview__value">${item.content}</span>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">消费时间</label>
+                            <span class="weui-form-preview__value">${item.createtime_text}</span>
+                        </div>
+                    </div>
+                </div>
+            `
+            container.append(html)
+        }
+
+    }
+</script>

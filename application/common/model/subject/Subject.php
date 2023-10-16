@@ -23,7 +23,7 @@ class Subject extends Model
         if (empty($data['likes'])) {
             return 0;
         }
-        return count(explode(",", $data['like']));
+        return count(explode(",", $data['likes']));
     }
 
     public function getCreatetimeTextAttr($value, $data)
@@ -47,4 +47,18 @@ class Subject extends Model
         return $this->belongsTo('app\common\model\subject\Category', 'cateid', 'id', [], 'LEFT')->setEagerlyType(0);
     }
 
+    public function chapters()
+    {
+        return $this->hasMany('app\common\model\subject\Chapter', 'subid', 'id', [], 'LEFT');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('app\common\model\subject\Comment', 'subid', 'id', [], 'LEFT');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany('app\common\model\subject\Order', 'subid', 'id', [], 'LEFT');
+    }
 }

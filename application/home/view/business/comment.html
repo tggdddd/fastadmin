@@ -1,0 +1,38 @@
+<body>
+<img src="{$subject.thumbs_text}" style="width:100%;">
+<div class="weui-cells__title" style="font-size:16px;">{$subject.title}</div>
+<form method="post">
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" id="content" name="content" placeholder="请输入内容"
+                          rows="3"></textarea>
+                <div class="weui-textarea-counter"><span id="text">0</span>/200</div>
+            </div>
+        </div>
+    </div>
+    <div class="action" id="action">
+        <button class="mui-btn mui-btn-primary" type="submit">立即提交</button>
+    </div>
+</form>
+
+</body>
+<style>
+    .red {
+        color: red
+    }
+</style>
+<script>
+    $("#content").on("input", function () {
+        const length = $(this).val().length
+        const text = $("#text")
+        text.text(length)
+        if (length > 200) {
+            text.parent().addClass("red")
+            $("#action").hide()
+        } else {
+            text.parent().removeClass("red")
+            $("#action").show()
+        }
+    })
+</script>

@@ -1,0 +1,63 @@
+<link href="__PUBLIC__assets/home/css/swiper-bundle.css" rel="stylesheet">
+<link href="__PUBLIC__assets/home/css/contact.css" rel="stylesheet">
+<script src="__PUBLIC__assets/home/js/swiper-bundle.min.js"></script>
+
+<body>
+<div class="mui-content">
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <a class="imgs">
+                    <img src="__PUBLIC__assets/home/images/video5.png">
+                    <p class="mui-slider-title">Javascript从零开始</p>
+                </a>
+            </div>
+            <div class="swiper-slide">
+                <a class="imgs">
+                    <img src="__PUBLIC__assets/home/images/video3.png">
+                    <p class="mui-slider-title">Javascript从零开始1111</p>
+                </a>
+            </div>
+            <div class="swiper-slide">
+                <a class="imgs">
+                    <img src="__PUBLIC__assets/home/images/video2.png">
+                    <p class="mui-slider-title">Javascript从零开始222</p>
+                </a>
+            </div>
+        </div>
+        <div class="swiper-pagination" style="text-align: right;"></div>
+    </div>
+</div>
+
+<table class="list">
+    <tr>
+        <td>市场销售</td>
+        <td>185-1242-1111</td>
+    </tr>
+    <tr class="price">
+        <td>技术支持</td>
+        <td>139-1234-5678</td>
+    </tr>
+    <tr>
+        <td>产品售后</td>
+        <td>178-1422-3211</td>
+    </tr>
+    <tr>
+        <td>市场销售</td>
+        <td>152-2233-6555</td>
+    </tr>
+</table>
+
+<div style="text-align: center;margin:20px 0px;">
+    可以在嵌入一个地图插件进来
+</div>
+{include file="common/footer"/}
+</body>
+
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        pagination: {
+            el: ".swiper-pagination",
+        },
+    });
+</script>

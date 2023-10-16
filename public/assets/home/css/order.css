@@ -40,7 +40,8 @@
 }
 
 .page__bd {
-    height: calc(100% - 146px);
+    /*height: calc(100% - 146px);*/
+    height: 100%;
 }
 
 .weui-tab {
@@ -108,6 +109,7 @@
 .weui-form-preview {
     position: relative;
     background-color: #fff;
+    margin: 12px !important;
 }
 
 .weui-form-preview:before {
@@ -192,10 +194,16 @@ label {
 }
 
 .weui-form-preview__value {
+
     display: block;
     overflow: hidden;
     word-break: normal;
-    word-wrap: break-word
+    word-wrap: break-word;
+
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+    display: -webkit-box;
 }
 
 .weui-form-preview__ft {

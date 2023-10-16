@@ -7,9 +7,51 @@ use app\common\library\Email;
 
 class Business extends Home
 {
+
     public function index()
     {
         return $this->fetch();
+    }
+
+    public function record()
+    {
+        $loginInfo = $this->auth(false);
+        if (empty($loginInfo)) {
+            $this->error("未登录");
+        }
+        if ($this->request->isAjax()) {
+            $limit = $this->request->param("limit", "10", "trim");
+            $page = $this->request->param("page", "1", "trim");
+            $count = $loginInfo->records()->count();
+            $list = $loginInfo->records()->order('createtime desc')->page($page, $limit)->select();
+            if (empty($list)) {
+                $this->error("没有更多数据");
+            }
+            $this->success("获取成功", null, ["count" => $count, "list" => $list]);
+        }
+        return $this->view->fetch();
+    }
+
+    public function order()
+    {
+        $loginInfo = $this->auth(false);
+        if (empty($loginInfo)) {
+            $this->error("未登录");
+        }
+        if ($this->request->isAjax()) {
+            $limit = $this->request->param("limit", "10", "trim");
+            $page = $this->request->param("page", "1", "trim");
+            $count = $loginInfo->orders()->count();
+            $list = $loginInfo->orders()->with("subject")->order('createtime desc')->page($page, $limit)->select();
+            if (empty($list)) {
+                $this->error("没有更多数据");
+            }
+            foreach ($list as $k => $v) {
+                $v->setAttr("comment", $v->subject->comments()->where("busid", "=", $loginInfo["id"])->count());
+            }
+            $this->success("获取成功", null, ["count" => $count, "list" => $list]);
+        }
+        return $this->view->fetch();
     }
 
     public function profile()
@@ -17,7 +59,7 @@ class Business extends Home
         if ($this->request->isPost()) {
             $data = $this->request->param('', "", "trim");
             $data['id'] = $this->view->business['id'];
-            $validate = validate("Business");
+            $validate = validate("app\\common\\validate\\business\\Business");
             if (!$validate->scene("profile")->check($data)) {
                 $this->error($validate->getError());
             }
@@ -62,6 +104,26 @@ class Business extends Home
         return $this->fetch();
     }
 
+    public function recharge()
+    {
+        $loginInfo = $this->auth(false);
+        if (empty($loginInfo)) {
+            $this->error("未登录");
+        }
+        if ($this->request->isPost()) {
+            $money = $this->request->param('money', "", "trim");
+            if (empty($money) || $money <= 0) {
+                $this->error("错误的参数");
+            }
+            $this->error("服务器异常");
+        }
+        return $this->fetch();
+    }
+
+    public function contact()
+    {
+        return $this->fetch();
+    }
     public function email()
     {
         if ($this->request->isAjax()) {
@@ -88,23 +150,23 @@ class Business extends Home
                     ->subject($subject)
                     ->message($content)
                     ->send();
-                if($sendResult){
+                if ($sendResult) {
                     $model->commit();
                     $this->success("邮件发送成功");
-                }else{
+                } else {
                     $this->error($emailInstance->getError());
                 }
             }
         }
-        if($this->request->isPost()){
+        if ($this->request->isPost()) {
             $email = $this->view->business['email'];
-            $code = $this->request->param("code","","trim");
-            if(empty($email) || empty($code)){
+            $code = $this->request->param("code", "", "trim");
+            if (empty($email) || empty($code)) {
                 $this->error("邮箱验证码不能为空");
             }
             $model = model("common/Ems");
             $record = $model->where(["email" => $email, "code" => $code, "event" => "auth"])->find();
-            if(!$record){
+            if (!$record) {
                 $this->error("验证码错误");
             }
             $model->startTrans();
@@ -112,20 +174,56 @@ class Business extends Home
             $result = $this->business_model
                 ->isUpdate()
                 ->save([
-                    "id"=>$this->view->business['id'],
-                    "auth"=>1
+                    "id" => $this->view->business['id'],
+                    "auth" => 1
                 ]);
-            if(!$result){
+            if (!$result) {
                 $this->error("更新账号状态失败");
             }
-            $delete = $model->where('id',"=",$record['id'])->delete();
-            if(!$delete){
+            $delete = $model->where('id', "=", $record['id'])->delete();
+            if (!$delete) {
                 $this->error("删除验证码记录失败");
             }
             $this->business_model->commit();
             $model->commit();
-            $this->success("验证成功","home/business/index");
+            $this->success("验证成功", "home/business/index");
         }
         return $this->fetch();
     }
+
+
+    public function comment()
+    {
+        $loginInfo = $this->auth(false);
+        if (empty($loginInfo)) {
+            $this->error("未登录");
+        }
+        $pid = $this->request->param("pid", "", "trim");
+        $order = $loginInfo->orders()->find($pid);
+        if (empty($order)) {
+            $this->error("订单不存在");
+        }
+        $subject = $order->subject;
+        if (empty($subject)) {
+            $this->error("未找到该课程");
+        }
+        if ($this->request->isPost()) {
+            $content = $this->request->param("content", "", "trim");
+            if (empty($content) || strlen($content) > 200) {
+                $this->error("内容不能为空且不能超过200字");
+            }
+            $loginInfo->comment()->save([
+                "subid" => $order->getAttr("subid"),
+                "content" => $content
+            ]);
+            if (empty($subject)) {
+                $this->error("评论失败，服务器繁忙");
+            }
+            $this->success("评论成功", "home/business/order");
+        }
+        $this->assign("subject", $subject);
+        $this->assign("pid", $pid);
+        return $this->view->fetch();
+    }
+
 }

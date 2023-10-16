@@ -39,4 +39,19 @@ class Business extends Model
         }
         return "";
     }
+
+    public function orders()
+    {
+        return $this->hasMany('app\common\model\subject\Order', 'busid', 'id');
+    }
+
+    public function comment()
+    {
+        return $this->hasMany('app\common\model\subject\Comment', 'busid', 'id');
+    }
+
+    public function records()
+    {
+        return $this->hasMany('app\common\model\business\Record', 'busid', 'id');
+    }
 }

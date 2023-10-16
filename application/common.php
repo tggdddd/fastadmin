@@ -598,14 +598,14 @@ if (!function_exists('randstr')) {
     }
 }
 if (!function_exists("upload_simple")) {
-    function upload_simple($file, $path = ROOT_PATH . "public/upload/",$includePath=false): array
+    function upload_simple($file, $path = ROOT_PATH . "public/uploads/", $includePath = false): array
     {
         $info = $file->move($path);
         if ($info) {
             return [
                 "success" => true,
                 "error" => "",
-                "path" =>$includePath?(realpath($path . $info->getSaveName())):"/upload/".(str_replace("\\","/",$info->getSaveName()))
+                "path" => $includePath ? (realpath($path . $info->getSaveName())) : "/uploads/" . (str_replace("\\", "/", $info->getSaveName()))
             ];
         }
         return [
@@ -621,5 +621,28 @@ if (!function_exists("upload_simple")) {
 if(!function_exists('eq_return')){
     function eq_return($value,$value2,$return,$else=""){
         return $value==$value2?$return:$else;
+    }
+}
+
+if (!function_exists('build_code')) {
+    /**
+     * 生成唯一订单号
+     * @param String $prefix 指定的订单前缀
+     * @return String  返回字符串
+     */
+
+    function build_code($prefix = "")
+    {
+        @date_default_timezone_set("PRC");
+        $order_id_main = date('YmdHis') . rand(10000, 99999);
+        //订单号码主体长度
+        $order_id_len = strlen($order_id_main);
+        $order_id_sum = 0;
+        for ($i = 0; $i < $order_id_len; $i++) {
+            $order_id_sum += (int)(substr($order_id_main, $i, 1));
+        }
+        //唯一订单号码（YYYYMMDDHHIISSNNNNNNNNCC）
+        $osn = $prefix . $order_id_main . str_pad((100 - $order_id_sum % 100) % 100, 2, '0', STR_PAD_LEFT); //生成唯一订单号
+        return $osn;
     }
 }
