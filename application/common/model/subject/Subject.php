@@ -4,9 +4,11 @@ namespace app\common\model\subject;
 
 use think\Model;
 use think\model\relation\BelongsTo;
+use traits\model\SoftDelete;
 
 class Subject extends Model
 {
+    use SoftDelete;
     protected $autoWriteTimestamp = true;
     protected $createTime = "createtime";
     protected $updateTime = false;

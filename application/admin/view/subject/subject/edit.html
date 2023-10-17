@@ -1,0 +1,59 @@
+<form action="" class="form-horizontal" data-toggle="validator" id="edit-form" method="POST" role="form">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Cateid')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {$cate_select}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" id="c-title" name="row[title]" type="text" value="{$row.title|htmlentities}">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Price')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" id="c-price" name="row[price]" step="0.01" type="number"
+                   value="{$row.price|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea class="form-control editor" cols="50" id="c-content" name="row[content]" rows="5">{$row.content|htmlentities}</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Thumbs')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <!-- 上传路径 -->
+                <input class="form-control" id="thumbs" name="row[thumbs]" readonly size="50" type="text"
+                       value="{$row.thumbs}"/>
+
+                <div class="input-group-addon no-border no-padding">
+                    <span><button class="btn btn-danger faupload" data-input-id="thumbs" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp"
+                                  data-multiple="false"
+                                  data-preview-id="p-thumbs"
+                                  id="faupload-thumbs" type="button"><i
+                            class="fa fa-upload"></i> 上传</button></span>
+                    <span><button class="btn btn-primary fachoose" data-input-id="thumbs" data-mimetype="image/*"
+                                  data-multiple="false" id="fachoose-thumbs" type="button"><i
+                            class="fa fa-list"></i> 选择</button></span>
+                </div>
+                <span class="msg-box n-right" for="thumbs"></span>
+            </div>
+            <ul class="row list-inline faupload-preview" id="p-thumbs"></ul>
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button class="btn btn-primary btn-embossed disabled" type="submit">{:__('OK')}</button>
+            <button class="btn btn-default btn-embossed" type="reset">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

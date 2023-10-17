@@ -13,7 +13,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             searchFormVisible: false, //是否始终显示搜索表单
             titleForm: '', //为空则不显示标题，不定义默认显示：普通搜索
             idTable: 'commonTable',
-            showExport: true,
+            showExport: false,
             exportDataType: "auto",
             exportTypes: ['json', 'xml', 'csv', 'txt', 'doc', 'excel'],
             exportOptions: {

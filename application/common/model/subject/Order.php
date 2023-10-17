@@ -3,6 +3,7 @@
 namespace app\common\model\subject;
 
 use think\Model;
+use traits\model\SoftDelete;
 
 class Order extends Model
 {
@@ -14,7 +15,7 @@ class Order extends Model
     protected $append = [
         'createtime_text',
     ];
-
+    use SoftDelete;
     public function getCreatetimeTextAttr($value, $data)
     {
         if (empty($data['createtime'])) {
