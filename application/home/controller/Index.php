@@ -132,11 +132,13 @@ class Index extends Home
         }
         $login = $this->auth(false);
         $likeStatus = false;
+        $shouldBuy = true;
         if ($login) {
             $likeStatus = in_array($login['id'], explode(",", $subject->getAttr("likes")));
             $order = $subject->orders()->where("busid", $login['id'])->find();
-            $this->assign("shouldBuy", empty($order));
+            $shouldBuy = empty($order);
         }
+        $this->assign("shouldBuy", empty($order));
         $this->assign("likeStatus", $likeStatus);
         $this->assign("subject", $subject);
         $this->assign("comments", $subject->comments()->limit(8)->select());

@@ -167,70 +167,65 @@
     })
 
     function Paydata(index) {
-        {
-            if condition = "$shouldBuy"
-        }
+        /*   {if condition = "@!$shouldBuy"}*/
         mui('#sheet1').popover('toggle');
-        {else
-            /}
-            const videoUrl = [
-                {foreach $chapters as $item}
-                "{$item.url}",
-                {/foreach}
-            ]
-            if (index >= videoUrl.length) {
-                mui.toast("暂无视频");
-                return
-            }
-            var videoObject = {
-                container: '#video',
-                video: videoUrl[index],
-                autoplay: true
-            }
-            new ckplayer(videoObject);
-            $("#cover").hide()
-            $("#video").show()
-            $('html, body').animate({scrollTop: 0}, 'fast');
-            {
-                /if}
-            }
+        /* {else/}*/
+        const videoUrl = [
+            /*  {foreach $chapters as $item}*/
+            "{$item.url}",
+            /*   {/foreach}*/
+        ]
+        if (index >= videoUrl.length) {
+            mui.toast("暂无视频");
+            return
+        }
+        var videoObject = {
+            container: '#video',
+            video: videoUrl[index],
+            autoplay: true
+        }
+        new ckplayer(videoObject);
+        $("#cover").hide()
+        $("#video").show()
+        $('html, body').animate({scrollTop: 0}, 'fast');
+        /* {/if}*/
+    }
 
-            $("#buy").on('click', function () {
-                mui('#sheet1').popover('toggle');
-                var btnArray = ['否', '是'];
-                mui.confirm('请问您确认购买吗？', '尊敬的用户', btnArray, function (e) {
-                    if (e.index === 1) {
-                        $.ajax({
-                            url: "{:url('home/index/buy',['subid'=>$subject.id])}",
-                            type: "post",
-                            success: function (res) {
-                                mui.toast(res.msg)
-                                if (res.code) {
-                                    location.href = "{:url('home/index/buy',['subid'=>$subject.id])}"
-                                }
-                            }
-                        })
-                    }
-                })
-            })
-            $("#like").on('click', function () {
-                const subId = "{$subject.id}"
-                const status = $(this).data("status")
-                console.log(status)
+    $("#buy").on('click', function () {
+        mui('#sheet1').popover('toggle');
+        var btnArray = ['否', '是'];
+        mui.confirm('请问您确认购买吗？', '尊敬的用户', btnArray, function (e) {
+            if (e.index === 1) {
                 $.ajax({
-                    url: "{:url('home/index/like')}",
+                    url: "{:url('home/index/buy',['subid'=>$subject.id])}",
                     type: "post",
-                    data: {status: status, pid: subId},
-                    dataType: "json"
-                }).then(res => {
-                    if (res.code) {
-                        $("#likeNum").text(res.data)
-                        const t = status === "add" ? "remove" : "add"
-                        $(this).attr("src", $(this).data(t))
-                        $(this).data("status", t)
+                    success: function (res) {
+                        mui.toast(res.msg)
+                        if (res.code) {
+                            location.href = "{:url('home/index/buy',['subid'=>$subject.id])}"
+                        }
                     }
-                    mui.toast(res.msg, {duration: 500})
                 })
-            })
-
+            }
+        })
+    })
+    $("#like").on('click', function () {
+        const subId = "{$subject.id}"
+        const status = $(this).data("status")
+        console.log(status)
+        $.ajax({
+            url: "{:url('home/index/like')}",
+            type: "post",
+            data: {status: status, pid: subId},
+            dataType: "json"
+        }).then(res => {
+            if (res.code) {
+                $("#likeNum").text(res.data)
+                const t = status === "add" ? "remove" : "add"
+                $(this).attr("src", $(this).data(t))
+                $(this).data("status", t)
+            }
+            mui.toast(res.msg, {duration: 500})
+        })
+    })
 </script>
