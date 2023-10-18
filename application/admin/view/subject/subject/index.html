@@ -9,9 +9,11 @@
                     <div class="toolbar" id="toolbar">
                         {:build_toolbar('refresh,add,edit,del,import')}
                     </div>
-                    <table class="table table-striped table-bordered table-hover table-nowrap" data-operate-del="{:$auth->check('subject/subject/del')}"
+                    <table class="table table-striped table-bordered table-hover table-nowrap"
+                           data-operate-del="{:$auth->check('subject/subject/del')}"
                            data-operate-edit="{:$auth->check('subject/subject/edit')}"
                            data-operate-chapter="{:$auth->check('subject/subject/chapter/index')}"
+                           data-operate-info="{:$auth->check('subject/info/index')}"
                            id="table"
                            width="100%">
                     </table>

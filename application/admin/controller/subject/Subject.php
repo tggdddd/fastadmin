@@ -103,5 +103,8 @@ class Subject extends Backend
         $this->success();
     }
 
-
+    public function selectpage()
+    {
+        return parent::selectpage();
+    }
 }

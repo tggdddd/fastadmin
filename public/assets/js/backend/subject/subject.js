@@ -11,6 +11,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     del_url: 'subject/subject/del',
                     multi_url: 'subject/subject/multi',
                     import_url: 'subject/subject/import',
+                    info_url: 'subject/info/index', //课程详情地址
+                    chapter_url: 'subject/chapter/index',
                     table: 'subject',
                 }
             });
@@ -72,10 +74,18 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             formatter: Table.api.formatter.operate,
                             buttons: [
                                 {
+                                    name: 'info',
+                                    icon: 'fa fa-ellipsis-h',
+                                    title: __('Detail'),
+                                    url: $.fn.bootstrapTable.defaults.extend.info_url,
+                                    extend: `data-toggle="tooltip" data-area='["90%","90%"]'`,
+                                    classname: 'btn btn-xs btn-success btn-dialog'
+                                },
+                                {
                                     name: 'chapter',
                                     icon: 'fa fa-bookmark',
                                     title: __('Chapter'),
-                                    url: 'subject/chapter/index',
+                                    url: $.fn.bootstrapTable.defaults.extend.chapter_url,
                                     extend: 'data-toggle="tooltip" data-container="body"',
                                     classname: 'btn btn-xs btn-info btn-addtabs'
                                 }

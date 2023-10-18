@@ -11,7 +11,7 @@ class Order extends Model
     protected $autoWriteTimestamp = true;
     protected $createTime = "createtime";
     protected $updateTime = false;
-    protected $deleteTime = true;
+    protected $deleteTime = "deletetime";
     protected $append = [
         'createtime_text',
     ];
