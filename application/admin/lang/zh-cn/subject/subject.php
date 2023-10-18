@@ -9,5 +9,6 @@ return [
     'Price' => '课程价格',
     'Cateid' => '课程分类',
     'Createtime' => '创建时间',
-    'Deletetime' => '软删除字段'
+    'Deletetime' => '软删除字段',
+    'Chapter' => '课程章节'
 ];

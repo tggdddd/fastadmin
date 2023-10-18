@@ -3,12 +3,16 @@
 namespace app\common\model\business;
 
 use think\Model;
+use traits\model\SoftDelete;
 
 class Business extends Model
 {
     protected $autoWriteTimestamp = true;
     protected $createTime = "createtime";
     protected $updateTime = false;
+    use SoftDelete;
+
+    protected $deleteTime = "deletetime";
     protected $append = [
         'avatar_text',
         'province_text',

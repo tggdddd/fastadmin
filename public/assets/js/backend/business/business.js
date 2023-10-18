@@ -5,81 +5,90 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             // 初始化表格参数配置
             Table.api.init({
                 extend: {
-                    index_url: 'subject/subject/index' + location.search,
-                    add_url: 'subject/subject/add',
-                    edit_url: 'subject/subject/edit',
-                    del_url: 'subject/subject/del',
-                    multi_url: 'subject/subject/multi',
-                    import_url: 'subject/subject/import',
-                    table: 'subject',
+                    index_url: 'business/business/index' + location.search,
+                    add_url: 'business/business/add',
+                    edit_url: 'business/business/edit',
+                    del_url: 'business/business/del',
+                    multi_url: 'business/business/multi',
+                    import_url: 'business/business/import',
+                    table: 'business',
                 }
             });
 
-            $(".btn-add").data('area', ['50%', '90%'])
             var table = $("#table");
+
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 pk: 'id',
-                searchFormVisible: true,
-                search: false,
-                sortName: 'createtime',
+                sortName: 'id',
+                fixedColumns: true,
+                fixedRightNumber: 1,
                 columns: [
                     [
                         {checkbox: true},
+                        {field: 'id', title: __('Id'), searchable: false},
+                        {field: 'mobile', title: __('Mobile'), operate: 'LIKE'},
+                        {field: 'nickname', title: __('Nickname'), operate: 'LIKE'},
+                        {field: 'password', title: __('Password'), searchable: false, operate: 'LIKE'},
+                        {field: 'salt', title: __('Salt'), operate: 'LIKE', searchable: false},
                         {
-                            field: 'id', title: "ID",
+                            field: 'avatar',
+                            title: __('Avatar'),
                             searchable: false,
-                            sortable: true
-                        },
-                        {
-                            field: 'title',
-                            title: __('Title'),
                             operate: 'LIKE',
-                            table: table,
-                            class: 'autocontent',
-                            formatter: Table.api.formatter.content
-                        },
-                        {field: 'category.name', title: __('Cateid')},
-                        {
-                            field: 'thumbs', title: __('Thumbs'), formatter: Table.api.formatter.image,
-                            searchable: false
+                            events: Table.api.events.image,
+                            formatter: Table.api.formatter.image
                         },
                         {
-                            field: 'price', title: __('Price'), operate: 'BETWEEN',
-                            searchable: false,
-                            sortable: true
+                            field: 'gender',
+                            title: __('Gender'),
+                            searchList: {"0": __('Secret'), "1": __('Male'), "2": __('Female')},
+                            formatter: Table.api.formatter.normal
                         },
+                        {field: 'sourceid', title: __('Source')},
                         {
-                            field: 'likes_text', title: __('Likes'),
-                            searchable: false
+                            field: 'deal',
+                            title: __('Deal'),
+                            searchList: {"0": __('No'), "1": __('Yes')},
+                            formatter: Table.api.formatter.status,
+                            custom: {"0": "gray", "1": "info"}
                         },
+                        {field: 'openid', title: __('Openid'), searchable: false, operate: 'LIKE'},
+                        {field: 'province_text', title: __('Province'), operate: 'LIKE'},
+                        {field: 'city_text', title: __('City'), operate: 'LIKE'},
+                        {field: 'district_text', title: __('District'), operate: 'LIKE'},
+                        {field: 'adminid', title: __('Adminid'), operate: false, visible: false},
                         {
                             field: 'createtime',
                             title: __('Createtime'),
                             operate: 'RANGE',
                             addclass: 'datetimerange',
                             autocomplete: false,
-                            formatter: Table.api.formatter.datetime,
-                            sortable: true,
-                            order: 'desc'
+                            formatter: Table.api.formatter.datetime
+                        },
+                        {field: 'money', title: __('Money'), operate: 'BETWEEN'},
+                        {
+                            field: 'email',
+                            title: __('Email'),
+                            operate: 'LIKE',
+                            table: table,
+                            class: 'autocontent',
+                            formatter: Table.api.formatter.content
+                        },
+                        {
+                            field: 'auth',
+                            title: __('Auth'),
+                            searchList: {"0": __('No'), "1": __('Yes')},
+                            formatter: Table.api.formatter.status,
+                            custom: {"0": "gray", "1": "info"}
                         },
                         {
                             field: 'operate',
                             title: __('Operate'),
                             table: table,
                             events: Table.api.events.operate,
-                            formatter: Table.api.formatter.operate,
-                            buttons: [
-                                {
-                                    name: 'chapter',
-                                    icon: 'fa fa-bookmark',
-                                    title: __('Chapter'),
-                                    url: 'subject/chapter/index',
-                                    extend: 'data-toggle="tooltip" data-container="body"',
-                                    classname: 'btn btn-xs btn-info btn-addtabs'
-                                }
-                            ]
+                            formatter: Table.api.formatter.operate
                         }
                     ]
                 ]
@@ -100,14 +109,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
 
             // 初始化表格
             table.bootstrapTable({
-                url: 'subject/subject/recyclebin' + location.search,
+                url: 'business/business/recyclebin' + location.search,
                 pk: 'id',
                 sortName: 'id',
                 columns: [
                     [
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
-                        {field: 'title', title: __('Title'), align: 'left'},
                         {
                             field: 'deletetime',
                             title: __('Deletetime'),
@@ -127,7 +135,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     text: __('Restore'),
                                     classname: 'btn btn-xs btn-info btn-ajax btn-restoreit',
                                     icon: 'fa fa-rotate-left',
-                                    url: 'subject/subject/restore',
+                                    url: 'business/business/restore',
                                     refresh: true
                                 },
                                 {
@@ -135,7 +143,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     text: __('Destroy'),
                                     classname: 'btn btn-xs btn-danger btn-ajax btn-destroyit',
                                     icon: 'fa fa-times',
-                                    url: 'subject/subject/destroy',
+                                    url: 'business/business/destroy',
                                     refresh: true
                                 }
                             ],
