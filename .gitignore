@@ -5,7 +5,6 @@
 /addons/*
 /public/assets/libs/
 /public/assets/addons/*
-/public/uploads/*
 .idea
 composer.lock
 *.log
