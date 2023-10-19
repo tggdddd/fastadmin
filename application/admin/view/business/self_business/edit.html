@@ -1,0 +1,92 @@
+<form action="" class="form-horizontal" data-toggle="validator" id="add-form" method="POST" role="form">
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select class="form-control selectpicker" data-rule="required" id="c-sourceid" name="row[sourceid]">
+                {foreach name="sourceList" item="vo"}
+                <option condition="$row.sourceid==$vo.id" name="key" value="{$vo.id}" {if }selected{
+                /if}>{$vo.name}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Nickname')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" data-rule="required;" id="c-nickname" name="row[nickname]" type="text"
+                   value="{$row.nickname}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Mobile')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" data-rule="required;mobile" id="c-mobile" name="row[mobile]" type="text"
+                   value="{$row.mobile}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Gender')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select class="form-control selectpicker" id="c-gender" name="row[gender]">
+                {foreach name="genderList" item="vo"}
+                <option condition="$row.gender==$key" name="key" value="{$key}" {if }selected{
+                /if}>{$vo}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Email')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" data-rule="required;email" id="c-email" name="row[email]" type="text"
+                   value="{$row.email}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Password')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" data-rule="password" id="c-password" name="row[password]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Area')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class='control-relative'>
+                <input class="form-control" data-toggle="city-picker"
+                       id="c-area" type="text" value="{$row.province_text}/{$row.city_text}/{$row.district_text}"></div>
+            <input class="hidden" id="city" name="row[city]" value="{$row.city}">
+            <input class="hidden" id="province" name="row[province]" value="{$row.province}">
+            <input class="hidden" id="district" name="row[district]" value="{$row.district}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Avatar')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <input class="form-control" id="c-avatar" name="row[avatar]" readonly size="50" type="text"
+                       value="{$row.avatar}">
+                <div class="input-group-addon no-border no-padding">
+                    <span><button class="btn btn-danger faupload" data-input-id="c-avatar"
+                                  data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp,image/webp"
+                                  data-multiple="false"
+                                  data-preview-id="p-avatar"
+                                  id="faupload-avatar" type="button"><i
+                            class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                    <span><button class="btn btn-primary fachoose" data-input-id="c-avatar" data-mimetype="image/*"
+                                  data-multiple="false" id="fachoose-avatar" type="button"><i
+                            class="fa fa-list"></i> {:__('Choose')}</button></span>
+                </div>
+                <span class="msg-box n-right" for="c-avatar"></span>
+            </div>
+            <ul class="row list-inline faupload-preview" id="p-avatar"></ul>
+        </div>
+    </div>
+
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button class="btn btn-primary btn-embossed disabled" type="submit">{:__('OK')}</button>
+        </div>
+    </div>
+</form>

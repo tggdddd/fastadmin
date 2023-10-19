@@ -23,4 +23,8 @@ return [
     'male' => '男',
     'Female' => '女',
     'Secret' => '保密',
+    'Apply' => '申请',
+    'Assign' => '分配',
+    "NickName" => "昵称",
+    "Please enter [account number, mobile phone number, nickname] to query" => "请输入【账号、手机号、昵称】进行查询"
 ];

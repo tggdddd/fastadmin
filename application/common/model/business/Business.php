@@ -17,7 +17,8 @@ class Business extends Model
         'avatar_text',
         'province_text',
         'city_text',
-        'district_text'
+        'district_text',
+        'source_text'
     ];
     public function getAvatarTextAttr($value,$data){
         if (empty($data['avatar']) || !is_file(ROOT_PATH . 'public' . $data['avatar'])) {
@@ -57,5 +58,13 @@ class Business extends Model
     public function records()
     {
         return $this->hasMany('app\common\model\business\Record', 'busid', 'id');
+    }
+
+    public function getSourceTextAttr($val, $data)
+    {
+        if (!empty($data['sourceid'])) {
+            return \model("common/business/Source")->find($data['sourceid'])->value("name");
+        }
+        return "未知";
     }
 }

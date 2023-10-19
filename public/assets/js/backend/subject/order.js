@@ -6,8 +6,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Table.api.init({
                 extend: {
                     index_url: 'subject/order/index' + location.search,
-                    add_url: 'subject/order/add',
-                    edit_url: 'subject/order/edit',
+                    // add_url: 'subject/order/add',
+                    // edit_url: 'subject/order/edit',
                     del_url: 'subject/order/del',
                     multi_url: 'subject/order/multi',
                     import_url: 'subject/order/import',
@@ -25,9 +25,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 columns: [
                     [
                         {checkbox: true},
-                        {field: 'id', title: __('Id')},
-                        {field: 'subid', title: __('Subid')},
-                        {field: 'busid', title: __('Busid')},
+                        {field: 'id', title: "ID", operate: false},
+                        {field: 'subject.title', title: __('Subid'), operate: 'LIKE',},
+                        {field: 'business.nickname', title: __('Busid')},
                         {field: 'total', title: __('Total'), operate: 'BETWEEN'},
                         {
                             field: 'code',

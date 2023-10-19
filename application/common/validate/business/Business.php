@@ -27,7 +27,9 @@ class Business extends Validate
     ];
     protected $scene = [
         "register" => ["mobile", "password"],
-        "profile" => ["mobile", "gender", "email"]
+        "profile" => ["mobile", "gender", "email"],
+        "add" => ['mobile', 'nickname', 'email', 'password'],
+        "edit" => ['mobile', 'nickname', 'email']
     ];
     /**
      * 设置错误的提醒信息

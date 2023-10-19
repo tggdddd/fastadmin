@@ -102,4 +102,8 @@ class User extends Backend
         $this->success();
     }
 
+    public function selectpage()
+    {
+        return parent::selectpage();
+    }
 }
