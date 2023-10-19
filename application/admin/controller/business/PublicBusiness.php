@@ -3,7 +3,8 @@
 namespace app\admin\controller\business;
 
 use app\common\controller\Backend;
-use think\Session;
+use app\common\model\business\Receive;
+use think\Db;
 
 /**
  * 客户管理
@@ -18,11 +19,13 @@ class PublicBusiness extends Backend
      * @var \app\common\model\business\Business
      */
     protected $model = null;
+    protected $recevieModel = null;
 
     public function _initialize()
     {
         parent::_initialize();
         $this->model = new \app\common\model\business\Business;
+        $this->recevieModel = new Receive;
         $this->view->assign("genderList", ["0" => __("Secret"), "1" => __("Male"), "2" => __("Female")]);
         $this->view->assign("dealList", ["0" => __("No"), "1" => __("Yes")]);
         $this->view->assign("authList", ["0" => __("No"), "1" => __("Yes")]);
@@ -45,11 +48,13 @@ class PublicBusiness extends Backend
         if (empty($row)) {
             $this->error("未找到该记录");
         }
-        $loginId = Session::get('admin')['id'];
+        $loginId = $this->auth->id;
+        Db::startTrans();
         $result = $row->update(["id" => $ids, "adminid" => $loginId]);
-        if (empty($result)) {
+        if (empty($result) || empty($this->recevieModel->record($loginId, $ids, Receive::APPLY))) {
             $this->error("操作失败，服务器异常");
         }
+        Db::commit();
         $this->success("操作成功");
     }
 
@@ -67,10 +72,12 @@ class PublicBusiness extends Backend
             $this->error("未找到该记录");
         }
         $assignId = $this->request->param("adminid");
+        Db::startTrans();
         $result = $row->update(["id" => $ids, "adminid" => $assignId]);
-        if (empty($result)) {
+        if (empty($result) || empty($this->recevieModel->record($this->auth->id, $ids, Receive::ASSIGN))) {
             $this->error("操作失败，服务器异常");
         }
+        Db::commit();
         $this->success("操作成功");
     }
 
