@@ -1,0 +1,32 @@
+<form action="" class="form-horizontal" data-toggle="validator" id="add-form" method="POST" role="form">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea class="form-control editor" cols="50" id="c-content" name="row[content]" rows="5"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Busid')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control selectpage"
+                   data-field="nickname"
+                   data-primary-key="id"
+                   data-rule="required"
+                   data-search-field="nickname,mobile,username"
+                   data-source="business.public_business/selectpage"
+                   id="c-busid"
+                   name="row[busid]"
+                   placeholder="{:__('Please enter [account number, mobile phone number, nickname] to query')}"
+                   type="text"
+                   value=""
+            >
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button class="btn btn-primary btn-embossed disabled" type="submit">{:__('OK')}</button>
+        </div>
+    </div>
+</form>

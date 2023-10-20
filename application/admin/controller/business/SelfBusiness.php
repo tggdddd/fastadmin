@@ -163,6 +163,31 @@ class SelfBusiness extends Backend
 
     }
 
+    public function business_visited($ids = null)
+    {
+        $this->relationSearch = true;
+        $this->model = model("common/business/Visit");
+        $this->request->filter(['strip_tags', 'trim']);
+        if ($this->request->isAjax()) {
+            if ($this->request->request('keyField')) {
+                return $this->selectpage();
+            }
+            list($where, $sort, $order, $offset, $limit) = $this->buildparams();
+            $list = $this->model
+                ->with(['admin', 'business'])
+                ->where($where)
+                ->where("busid", '=', $ids)
+                ->order($sort, $order)
+                ->paginate($limit);
+            foreach ($list as $row) {
+                $row->getRelation('business')->visible(['nickname']);
+                $row->getRelation('admin')->visible(['nickname']);
+            }
+            $result = array("total" => $list->total(), "rows" => $list->items());
+            return json($result);
+        }
+        return $this->view->fetch();
+    }
     public function business_record($ids = null)
     {
         $this->request->filter(['strip_tags', 'trim']);

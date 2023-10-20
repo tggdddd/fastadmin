@@ -123,8 +123,98 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         detail_render: {
             detail: function (ids) {
             },
-            visited: "",
-            application: "",
+            visited: function (ids) {
+                Table.api.init({
+                    extend: {
+                        index_url: `business/self_business/business_visited?ids=${ids}`,
+                        add_url: `business/visit/add?busid=${ids}`,
+                        edit_url: 'business/visit/edit?busid=${ids}',
+                        del_url: 'business/visit/del',
+                        multi_url: 'business/visit/multi',
+                        table: 'business_record',
+                    }
+                });
+                var table = $("#visited_table");
+                table.bootstrapTable({
+                    url: $.fn.bootstrapTable.defaults.extend.index_url,
+                    pk: 'id',
+                    sortName: 'id',
+                    fixedColumns: true,
+                    toolbar: "#visited_toolbar",
+                    fixedRightNumber: 1,
+                    columns: [
+                        [
+                            {checkbox: true},
+                            {field: 'id', title: __('Id')},
+                            {
+                                field: 'content',
+                                title: __('Content'),
+                                operate: 'LIKE',
+                                formatter: Table.api.formatter.normal
+                            },
+                            {
+                                field: 'createtime',
+                                title: __('Createtime'),
+                                operate: 'RANGE',
+                                addclass: 'datetimerange',
+                                autocomplete: false,
+                                formatter: Table.api.formatter.datetime
+                            },
+                            {
+                                field: 'operate',
+                                title: __('Operate'),
+                                table: table,
+                                events: Table.api.events.operate,
+                                formatter: Table.api.formatter.operate
+                            }
+                        ]
+                    ]
+                });
+                // 为表格绑定事件
+                Table.api.bindevent(table);
+            },
+            application: function (ids) {
+                Table.api.init({
+                    extend: {
+                        index_url: 'business/receive/index' + location.search,
+                        table: 'business_receive',
+                    }
+                });
+                var table = $("#application_table");
+                table.bootstrapTable({
+                    url: $.fn.bootstrapTable.defaults.extend.index_url,
+                    pk: 'id',
+                    sortName: 'id',
+                    toolbar: "#application_toolbar",
+                    columns: [
+                        [
+                            // {checkbox: true},
+                            {field: 'id', title: __('Id'), visible: false},
+                            {field: 'admin.nickname', title: __('Applyid')},
+                            {
+                                field: 'status',
+                                title: __('Apply Status'),
+                                searchList: {
+                                    "apply": __('Apply '),
+                                    "allot": __('Allot '),
+                                    "recovery": __('Recovery '),
+                                    "reject": __('Reject ')
+                                },
+                                formatter: Table.api.formatter.status
+                            },
+                            {
+                                field: 'applytime',
+                                title: __('Applytime'),
+                                operate: 'RANGE',
+                                addclass: 'datetimerange',
+                                autocomplete: false,
+                                formatter: Table.api.formatter.datetime
+                            }
+                        ]
+                    ]
+                });
+                Table.api.bindevent(table);
+            },
             expensed: function (ids) {
                 Table.api.init({
                     extend: {

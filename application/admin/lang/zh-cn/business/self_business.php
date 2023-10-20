@@ -39,4 +39,13 @@ return [
     'Code' => '订单号',
 
     'Content' => "内容",
+
+
+    'Applyid' => "操作员",
+    'Apply Status' => "操作",
+    'Apply ' => "申请",
+    'Allot ' => "分配",
+    'Recovery ' => "回收",
+    'Reject ' => "拒绝",
+    'Applytime' => "操作时间"
 ];
