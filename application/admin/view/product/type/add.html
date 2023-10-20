@@ -1,0 +1,42 @@
+<form action="" class="form-horizontal" data-toggle="validator" id="add-form" method="POST" role="form">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" id="c-name" name="row[name]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Thumb')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <input class="form-control" data-rule="" id="c-avatar" name="row[thumb]" readonly size="50" type="text"
+                       value="">
+                <div class="input-group-addon no-border no-padding">
+                    <span><button class="btn btn-danger faupload" data-input-id="c-avatar" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp"
+                                  data-multiple="false"
+                                  data-preview-id="p-avatar"
+                                  id="faupload-avatar" type="button"><i
+                            class="fa fa-upload"></i> 上传</button></span>
+                    <span><button class="btn btn-primary fachoose" data-input-id="c-avatar" data-mimetype="image/*"
+                                  data-multiple="false" id="fachoose-avatar" type="button"><i
+                            class="fa fa-list"></i> 选择</button></span>
+                </div>
+                <span class="msg-box n-right" for="c-avatar"></span>
+            </div>
+            <ul class="row list-inline faupload-preview" id="p-avatar"></ul>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Weigh')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" id="c-weigh" min="0" name="row[weigh]" type="number" value="0">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button class="btn btn-primary btn-embossed disabled" type="submit">{:__('OK')}</button>
+        </div>
+    </div>
+</form>

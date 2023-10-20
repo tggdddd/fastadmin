@@ -1,0 +1,38 @@
+<form action="" class="form-horizontal" data-toggle="validator" id="add-form" method="POST" role="form">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" data-rule="required" id="c-name" name="row[name]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Mobile')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" data-rule="required;mobile" id="c-mobile" name="row[mobile]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Area')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class='control-relative'>
+                <input class="form-control" data-rule="required" data-toggle="city-picker" id="c-area" type="text">
+            </div>
+            <input class="hidden" id="city" name="row[city]" value="">
+            <input class="hidden" id="province" name="row[province]" value="">
+            <input class="hidden" id="district" name="row[district]" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Address')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" data-rule="required" id="c-address" name="row[address]" type="text">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button class="btn btn-primary btn-embossed disabled" type="submit">{:__('OK')}</button>
+        </div>
+    </div>
+</form>
