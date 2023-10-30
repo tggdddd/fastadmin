@@ -17,7 +17,7 @@ class Home extends Controller{
         "menu_index"
     ];
 
-    public function menu_index()
+    protected function menu_index()
     {
         $this->assign("menu_index", $this->request->param("menu_index", "0"));
     }
@@ -32,7 +32,8 @@ class Home extends Controller{
         $this->auth();
     }
 
-    public function auth($redirect=true){
+    protected function auth($redirect = true)
+    {
         $cookie = cookie("business");
         $id = trim($cookie['id']??0);
         $mobile = trim($cookie['mobile']??"");

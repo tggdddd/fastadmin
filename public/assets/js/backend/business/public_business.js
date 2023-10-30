@@ -114,24 +114,71 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Table.api.bindevent(table);
         },
         recyclebin: function () {
-            // 初始化表格参数配置
             Table.api.init({
-                extend: {
-                    'dragsort_url': ''
-                }
-            });
-
+                extends: {}
+            })
             var table = $("#table");
-
             // 初始化表格
             table.bootstrapTable({
                 url: 'business/public_business/recyclebin' + location.search,
                 pk: 'id',
                 sortName: 'id',
+                fixedColumns: true,
+                fixedRightNumber: 1,
                 columns: [
                     [
                         {checkbox: true},
-                        {field: 'id', title: __('Id')},
+                        {field: 'id', title: __('Id'), operate: false},
+                        {field: 'mobile', title: __('Mobile'), operate: 'LIKE'},
+                        {field: 'nickname', title: __('Nickname'), operate: 'LIKE'},
+                        {
+                            field: 'avatar',
+                            title: __('Avatar'),
+                            operate: false,
+                            events: Table.api.events.image,
+                            formatter: Table.api.formatter.image
+                        },
+                        {
+                            field: 'gender',
+                            title: __('Gender'),
+                            searchList: {"0": __('Secret'), "1": __('Male'), "2": __('Female')},
+                            formatter: Table.api.formatter.normal
+                        },
+                        {field: 'source_text', title: __('Source')},
+                        {
+                            field: 'deal',
+                            title: __('Deal'),
+                            searchList: {"0": __('No'), "1": __('Yes')},
+                            formatter: Table.api.formatter.status,
+                            custom: {"0": "gray", "1": "info"}
+                        },
+                        {field: 'province_text', title: __('Province'), operate: false},
+                        {field: 'city_text', title: __('City'), operate: false},
+                        {field: 'district_text', title: __('District'), operate: false},
+                        {
+                            field: 'createtime',
+                            title: __('Createtime'),
+                            operate: 'RANGE',
+                            addclass: 'datetimerange',
+                            autocomplete: false,
+                            formatter: Table.api.formatter.datetime
+                        },
+                        {field: 'money', title: __('Money'), operate: 'BETWEEN'},
+                        {
+                            field: 'email',
+                            title: __('Email'),
+                            operate: 'LIKE',
+                            table: table,
+                            class: 'autocontent',
+                            formatter: Table.api.formatter.content
+                        },
+                        {
+                            field: 'auth',
+                            title: __('Auth'),
+                            searchList: {"0": __('No'), "1": __('Yes')},
+                            formatter: Table.api.formatter.status,
+                            custom: {"0": "gray", "1": "info"}
+                        },
                         {
                             field: 'deletetime',
                             title: __('Deletetime'),

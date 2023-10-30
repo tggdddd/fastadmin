@@ -25,9 +25,38 @@ class Product extends Model
     // 追加属性
     protected $append = [
         'flag_text',
-        'status_text'
+        'status_text',
+        'type_text',
+        'unit_text'
     ];
 
+    public function getThumbsAttr($val)
+    {
+        if (is_array($val)) {
+            return array_map(function ($e) {
+                return cdnurl($e);
+            }, $val);
+        }
+        return cdnurl($val);
+    }
+
+    public function getUnitTextAttr($value, $data)
+    {
+        if (isset($data['unitid'])) {
+            $record = \model("common/product/Unit")->find($data['unitid']);
+            return empty($record) ? "" : $record['name'];
+        }
+        return "";
+    }
+
+    public function getTypeTextAttr($value, $data)
+    {
+        if (isset($data['typeid'])) {
+            $record = \model("common/product/Type")->find($data['typeid']);
+            return empty($record) ? "" : $record['name'];
+        }
+        return "";
+    }
     public function getFlagTextAttr($value, $data)
     {
         $value = $value ? $value : (isset($data['flag']) ? $data['flag'] : '');

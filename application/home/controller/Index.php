@@ -6,6 +6,9 @@ use app\common\controller\Home;
 use think\Loader;
 use think\Request;
 
+/**
+ * 首页
+ */
 class Index extends Home
 {
     protected $noNeedLogin = ["*"];
@@ -21,6 +24,14 @@ class Index extends Home
         $this->record_model = model("common/business/Record");
     }
 
+    /**
+     * 首页
+     * @return string
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
     public function index()
     {
 //        轮播图
@@ -34,6 +45,15 @@ class Index extends Home
         return $this->view->fetch();
     }
 
+    /**
+     * 购买课程
+     * @return string|void
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
+     */
     public function buy()
     {
         $pid = $this->request->param('subid', 0, 'trim');
@@ -88,6 +108,14 @@ class Index extends Home
         return $this->view->fetch();
     }
 
+    /**
+     * 评论列表
+     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
     public function comment_list()
     {
         $pid = $this->request->param("pid", "", "trim");
@@ -115,6 +143,14 @@ class Index extends Home
         return $this->fetch();
     }
 
+    /**
+     * 课程详情
+     * @return string
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
     public function info()
     {
         if ($this->request->isAjax()) {
@@ -147,6 +183,13 @@ class Index extends Home
         return $this->view->fetch();
     }
 
+    /**
+     * 点赞
+     * @return void
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
     public function like()
     {
         $pid = $this->request->param('pid', 0, 'trim');
@@ -182,6 +225,14 @@ class Index extends Home
         $this->success($status == 'add' ? "点赞成功" : "取消点赞", null, count($likes));
     }
 
+    /**
+     * 搜索课程
+     * @return string
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
     public function search()
     {
         if ($this->request->isAjax()) {
@@ -200,6 +251,14 @@ class Index extends Home
         return $this->view->fetch();
     }
 
+    /**
+     * 登录
+     * @return string
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
     public function login()
     {
         if ($this->request->isPost()) {
@@ -214,6 +273,11 @@ class Index extends Home
         return $this->view->fetch();
     }
 
+    /**
+     * 注册
+     * @return string
+     * @throws \think\Exception
+     */
     public function register()
     {
         if ($this->request->isPost()) {

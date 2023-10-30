@@ -78,6 +78,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             title: __('Area'),
                             operate: '=',
                             extend: `data-toggle="city-picker"`,
+                            visible: false
                         },
                         {
                             field: 'address',
@@ -87,9 +88,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             class: 'autocontent',
                             formatter: Table.api.formatter.content
                         },
-                        {field: 'province', operate: '=', addClass: "hidden"},
-                        {field: 'city', operate: '=', addClass: "hidden"},
-                        {field: 'district', operate: '=', addClass: "hidden"},
+                        {field: 'province', operate: '=', addClass: "hidden", visible: false},
+                        {field: 'city', operate: '=', addClass: "hidden", visible: false},
+                        {field: 'district', operate: '=', addClass: "hidden", visible: false},
                         {
                             field: 'operate',
                             title: __('Operate'),

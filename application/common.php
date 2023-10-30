@@ -86,6 +86,9 @@ if (!function_exists('cdnurl')) {
      */
     function cdnurl($url, $domain = false)
     {
+        if (stripos($url, "http") === 0) {
+            return $url;
+        }
         $regex = "/^((?:[a-z]+:)?\/\/|data:image\/)(.*)/i";
         $cdnurl = \think\Config::get('upload.cdnurl');
         if (is_bool($domain) || stripos($cdnurl, '/') === 0) {

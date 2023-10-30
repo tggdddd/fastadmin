@@ -5,14 +5,39 @@ namespace app\home\controller;
 use app\common\controller\Home;
 use app\common\library\Email;
 
+/**
+ * 用户端
+ */
 class Business extends Home
 {
-
+    /**
+     * 首页内容
+     *
+     * @ApiTitle    (首页内容)
+     * @ApiSummary  (首页内容)
+     * @ApiMethod   (GET)
+     */
     public function index()
     {
         return $this->fetch();
     }
 
+    /**
+     * 获取消费记录
+     *
+     * @ApiTitle    (获取消费记录)
+     * @ApiSummary  (获取消费记录)
+     * @ApiMethod   (POST)
+     * @ApiParams   (name="limit", type="integer", required=false, description="每页大小")
+     * @ApiParams   (name="page", type="integer", required=false, description="页码")
+     * @ApiReturnParams   (name="code", type="integer", required=true, sample="0")
+     * @ApiReturnParams   (name="msg", type="string", required=true, sample="返回成功")
+     * @ApiReturnParams   (name="data", type="object", sample="{'user_id':'int','user_name':'string','profile':{'email':'string','age':'integer'}}", description="扩展数据返回")
+     * @ApiReturn   ({
+    'code':'1',
+    'msg':'返回成功'
+    })
+     */
     public function record()
     {
         $loginInfo = $this->auth(false);
@@ -32,6 +57,11 @@ class Business extends Home
         return $this->view->fetch();
     }
 
+    /**
+     * 订单
+     * @return string
+     * @throws \think\Exception
+     */
     public function order()
     {
         $loginInfo = $this->auth(false);
@@ -54,6 +84,10 @@ class Business extends Home
         return $this->view->fetch();
     }
 
+    /**
+     * 个人信息
+     * @return mixed
+     */
     public function profile()
     {
         if ($this->request->isPost()) {
@@ -104,6 +138,10 @@ class Business extends Home
         return $this->fetch();
     }
 
+    /**
+     * 充值
+     * @return mixed
+     */
     public function recharge()
     {
         $loginInfo = $this->auth(false);
@@ -120,10 +158,23 @@ class Business extends Home
         return $this->fetch();
     }
 
+    /**
+     * 留言
+     * @return mixed
+     */
     public function contact()
     {
         return $this->fetch();
     }
+
+    /**
+     * 验证邮箱
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
+     */
     public function email()
     {
         if ($this->request->isAjax()) {
@@ -191,7 +242,11 @@ class Business extends Home
         return $this->fetch();
     }
 
-
+    /**
+     * 评论
+     * @return string
+     * @throws \think\Exception
+     */
     public function comment()
     {
         $loginInfo = $this->auth(false);

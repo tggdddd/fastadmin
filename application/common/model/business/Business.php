@@ -21,10 +21,11 @@ class Business extends Model
         'source_text'
     ];
     public function getAvatarTextAttr($value,$data){
+
         if (empty($data['avatar']) || !is_file(ROOT_PATH . 'public' . $data['avatar'])) {
-            return "/assets/img/avatar.png";
+            return cdnurl("/assets/img/avatar.png");
         }
-        return $data['avatar'];
+        return cdnurl($data['avatar']);
     }
     public function getProvinceTextAttr($value,$data){
         if(!empty($data['province'])){

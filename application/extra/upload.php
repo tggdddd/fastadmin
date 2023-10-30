@@ -9,7 +9,7 @@ return [
     /**
      * CDN地址
      */
-    'cdnurl'    => '',
+    'cdnurl' => 'http://course.cc',
     /**
      * 文件保存格式
      */

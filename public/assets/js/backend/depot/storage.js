@@ -93,7 +93,16 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             title: __('Operate'),
                             table: table,
                             events: Table.api.events.operate,
-                            formatter: Table.api.formatter.operate
+                            formatter: Table.api.formatter.operate,
+                            buttons: [
+                                {
+                                    name: __('Detail'),
+                                    text: __('Detail'),
+                                    classname: 'btn btn-xs btn-info btn-addtabs',
+                                    // icon: 'fa fa-hand-paper-o',
+                                    url: 'business/public_business/apply'
+                                }
+                            ]
                         }
                     ]
                 ]
