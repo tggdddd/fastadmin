@@ -42,4 +42,35 @@ return [
     'Supplier.district' => '区域',
     'Supplier.address' => '详细地址',
     'Reviewer.nickname' => '审批人',
+
+    'Nums' => '商品数量',
+    'Price' => '商品单价',
+    'Thumb' => '商品图片',
+    'Total' => '商品总价',
+    'Reason' => '次品维修后原因说明',
+    'Product' => '入库商品',
+
+
+    'Content' => '描述',
+    'Thumbs' => '图集',
+    'Flag' => '标签',
+    'NEW PRODUCT' => '新品',
+    'HOT PRODUCT' => '热销',
+    'RECOMMEND' => '推荐',
+    'Stock' => '商品库存',
+    'Typeid' => '分类',
+    'Unitid' => '商品单位',
+    'REMOVED FROM SHELVES' => '下架',
+    'ON THE SHELVES' => '上架',
+    'Type.id' => '主键',
+    'Type.name' => '分类',
+    'Type.thumb' => '分类图片',
+    'Type.weigh' => '权重',
+    'Unit.id' => '主键',
+    'Unit.name' => '单位',
+
+
+    'Approval' => '审批',
+    'Reject' => '不通过',
+    'Stock in' => '入库'
 ];

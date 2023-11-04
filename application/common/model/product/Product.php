@@ -27,17 +27,27 @@ class Product extends Model
         'flag_text',
         'status_text',
         'type_text',
-        'unit_text'
+        'unit_text',
+        'thumb'
     ];
+
+    public function getThumbAttr($val, $data)
+    {
+        $data = $this->getThumbsAttr($data['thumbs']);
+        if (is_array($data)) {
+            return $data[0];
+        }
+        return $data;
+    }
 
     public function getThumbsAttr($val)
     {
-        if (is_array($val)) {
-            return array_map(function ($e) {
-                return cdnurl($e);
-            }, $val);
+        if (empty($val)) {
+            return [];
         }
-        return cdnurl($val);
+        $val = explode(",", $val);
+        $val = array_filter($val, fn($e) => !empty($e));
+        return array_map(fn($e) => cdnurl($e), $val);
     }
 
     public function getUnitTextAttr($value, $data)
@@ -48,7 +58,6 @@ class Product extends Model
         }
         return "";
     }
-
     public function getTypeTextAttr($value, $data)
     {
         if (isset($data['typeid'])) {
@@ -63,32 +72,41 @@ class Product extends Model
         $list = $this->getFlagList();
         return isset($list[$value]) ? $list[$value] : '';
     }
-
     public function getFlagList()
     {
         return ['1' => __('NEW PRODUCT'), '2' => __('HOT PRODUCT'), '3' => __('RECOMMEND')];
     }
-
     public function getStatusTextAttr($value, $data)
     {
         $value = $value ? $value : (isset($data['status']) ? $data['status'] : '');
         $list = $this->getStatusList();
         return isset($list[$value]) ? $list[$value] : '';
     }
-
     public function getStatusList()
     {
         return ['0' => __('REMOVED FROM SHELVES'), '1' => __('ON THE SHELVES')];
     }
-
     public function type()
     {
         return $this->belongsTo('Type', 'typeid', 'id', [], 'LEFT')->setEagerlyType(0);
     }
-
-
     public function unit()
     {
         return $this->belongsTo('Unit', 'unitid', 'id', [], 'LEFT')->setEagerlyType(0);
+    }
+
+    public function stars()
+    {
+        return $this->hasMany('app\common\model\business\Collection', 'proid', 'id');
+    }
+
+    public function carts()
+    {
+        return $this->hasMany('app\common\model\business\Cart', 'proid', 'id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany('app\common\model\product\Order', 'proid', 'id');
     }
 }

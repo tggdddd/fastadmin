@@ -28,6 +28,10 @@ class Storage extends Model
         'status_text'
     ];
 
+    public function storageProducts()
+    {
+        return $this->hasMany("app\common\model\depot\StorageProduct", 'storageid', 'id');
+    }
     public function getTypeTextAttr($value, $data)
     {
         $value = $value ? $value : (isset($data['type']) ? $data['type'] : '');
@@ -54,13 +58,13 @@ class Storage extends Model
 
     public function admin()
     {
-        return $this->belongsTo('app\common\model\Admin', 'reviewerid', 'id', [], 'LEFT')->setEagerlyType(0);
+        return $this->belongsTo('app\common\model\Admin', 'adminid', 'id', [], 'LEFT')->setEagerlyType(0);
     }
 
 
     public function reviewer()
     {
-        return $this->belongsTo('app\common\model\Admin', 'adminid', 'id', [], 'LEFT')->setEagerlyType(0);
+        return $this->belongsTo('app\common\model\Admin', 'reviewerid', 'id', [], 'LEFT')->setEagerlyType(0);
     }
 
 

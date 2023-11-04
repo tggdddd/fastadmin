@@ -1,0 +1,55 @@
+<style type="text/css">
+    #schedulepicker {
+        padding-top: 7px;
+    }
+</style>
+<form action="" class="form-horizontal form-ajax" data-toggle="validator" id="edit-form" method="POST" role="form">
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2" for="content">{:__('Content')}:</label>
+        <div class="col-xs-12 col-sm-10">
+            <textarea class="form-control" cols="30" data-rule="required" id="conent" name="row[content]" readonly
+                      rows="20" style="width:100%;">{$row.content|htmlentities}</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2" for="executetime">{:__('End time')}:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input class="form-control datetimepicker" data-rule="{:__('End time')}:required;match(gte, row[begintime], datetime)" disabled id="executetime"
+                   name="row[executetime]"
+                   size="6" type="text" value="{$row.executetime|datetime}"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2" for="completetime">{:__('End time')}:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input class="form-control datetimepicker" data-rule="{:__('End time')}:required;match(gte, row[begintime], datetime)" disabled id="completetime"
+                   name="row[completetime]"
+                   size="6" type="text" value="{$row.completetime|datetime}"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2" for="processid">{:__('Processid')}:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input class="form-control" disabled id="processid" name="row[processid]" type="text"
+                   value="{$row.processid}"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div style="padding-top:8px;">
+                {if $row['status']=='success'}<span class="label label-success">{:__('Success')}</span>{else/}<span
+                    class="label label-danger">{:__('Failure')}</span>{/if}
+            </div>
+        </div>
+    </div>
+    <div class="form-group hide layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button class="btn btn-success btn-embossed" onclick="parent.Layer.close(parent.Layer.getFrameIndex(window.name))"
+                    type="button">{:__('Close')}
+            </button>
+        </div>
+    </div>
+
+</form>

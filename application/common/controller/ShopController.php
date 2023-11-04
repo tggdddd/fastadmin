@@ -3,6 +3,8 @@
 namespace app\common\controller;
 
 use think\exception\HttpResponseException;
+use think\Lang;
+use think\Loader;
 use think\Request;
 use think\Response;
 
@@ -14,7 +16,7 @@ class ShopController
     /*用户模型*/
     protected $business_model = null;
     /*登录用户*/
-    protected $user;
+    protected \app\common\model\business\Business $user;
     /*token*/
     protected $token = null;
     /*免登录列表*/
@@ -32,6 +34,7 @@ class ShopController
         $this->request->filter('trim,strip_tags,htmlspecialchars');
         $this->business_model = \model("common/business/Business");
         $this->auth(true);
+        $this->loadlang($this->request->controller());
     }
 
     function _initialize()
@@ -87,6 +90,19 @@ class ShopController
         return true;
     }
 
+    /**
+     * 加载语言文件
+     * @param string $name
+     */
+    protected function loadlang($name)
+    {
+        $name = Loader::parseName($name);
+        $name = preg_match("/^([a-zA-Z0-9_\.\/]+)\$/i", $name) ? $name : 'index';
+        $lang = $this->request->langset();
+        $lang = preg_match("/^([a-zA-Z\-_]{2,10})\$/i", $lang) ? $lang : 'zh-cn';
+        $path = APP_PATH . $this->request->module() . '/lang/' . $lang . '/' . str_replace('.', '/', $name) . '.php';
+        Lang::load(APP_PATH . $this->request->module() . '/lang/' . $lang . '/' . str_replace('.', '/', $name) . '.php');
+    }
     /**
      * 返回数据（执行失败）
      * @param $msg string 提示信息

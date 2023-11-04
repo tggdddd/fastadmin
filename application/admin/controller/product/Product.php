@@ -41,18 +41,14 @@ class Product extends Backend
                 return $this->selectpage();
             }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
-
-            $list = $this->model
-                ->with(['type', 'unit'])
-                ->where($where)
+            $product = $this->model->where($where);
+            $ids = $this->request->param("filterid", "");
+            if (!empty($ids)) {
+                $product->where("id", "IN", $ids);
+            }
+            $list = $product
                 ->order($sort, $order)
                 ->paginate($limit);
-
-            foreach ($list as $row) {
-
-
-            }
-
             $result = array("total" => $list->total(), "rows" => $list->items());
 
             return json($result);
@@ -60,4 +56,8 @@ class Product extends Backend
         return $this->view->fetch();
     }
 
+    public function selectpage()
+    {
+        return parent::selectpage();
+    }
 }

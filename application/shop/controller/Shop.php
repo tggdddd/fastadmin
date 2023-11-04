@@ -7,21 +7,26 @@ use app\common\library\Email;
 use think\Db;
 use think\Exception;
 use think\Loader;
+use function model;
 
 /**
  * 商城接口
  */
 class Shop extends ShopController
 {
-    protected $noNeedLogin = ['index', 'category', 'category_i', 'login', 'register'];
-    protected $product_model;
-    protected $product_type_model;
+    protected $noNeedLogin = ['index', 'category', 'shop_detail', 'login', 'register'];
+    protected ?\app\common\model\product\Product $product_model = null;
+    protected ?\app\common\model\product\Type $product_type_model = null;
+    protected ?\app\common\model\business\Address $address_model = null;
+    protected ?\app\common\model\business\Cart $cart_model = null;
 
     function _initialize()
     {
         parent::_initialize();
-        $this->product_model = \model("common/product/Product");
-        $this->product_type_model = \model("common/product/Type");
+        $this->product_model = model("common/product/Product");
+        $this->product_type_model = model("common/product/Type");
+        $this->address_model = model("common/business/Address");
+        $this->cart_model = model("common/business/Cart");
     }
 
     /**
@@ -65,43 +70,195 @@ class Shop extends ShopController
     }
 
     /**
-     * 分类
+     * 商品详情
      */
-    public function category()
+    public function shop_detail($id)
     {
-        $recommend = [
-            "id" => 0,
-            "name" => "为你推荐",
-            "products" => $this->product_model
-                ->with(['unit', 'type'])
-                ->where("status", '=', 1)
-                ->order("createtime", "desc")
-                ->limit(9)
-                ->select()
-        ];
-        $category = $this->product_type_model
-            ->with(['products' => function ($query) {
-                $query->where("status", '=', 1)
-                    ->order("createtime", "desc");
-            }])
-            ->order("weigh", "desc")
-            ->select();
-        array_unshift($category, $recommend);
-        $this->success("获取成功", $category);
+        $product = $this->product_model->find($id);
+        if (empty($product)) {
+            $this->error("商品不存在");
+        }
+        $product['sale'] = $product->orders()->sum("pronum");
+        if ($this->user) {
+            $product['star'] = !empty($product->stars()->where('busid', '=', $this->user->id)->count());
+            $product['cart'] = $this->cart_model->where('busid', '=', $this->user->id)->sum("num");
+        }
+        $this->success("获取成功", $product);
     }
 
     /**
-     * 分类详情
+     * 更新购物车
+     * 商品数量-是否选中
+     * @param $data
      */
-    public function category_i($id = 0, $page = 1, $limit = 10)
+    public function cart_update($data)
     {
-        $shops = $this->product_model
-            ->with(['unit', 'type'])
+        $this->cart_model->saveAll($data);
+        $this->success();
+    }
+
+    /**
+     * 删除购物车
+     * @param id string id
+     */
+    public function cart_delete($id)
+    {
+        $cart = model('common/business/Cart');
+        $delete = $cart
+            ->where('busid', '=', $this->user->id)
+            ->where('id', '=', $id)
+            ->delete();
+        if ($delete) {
+            $this->success();
+        }
+        $this->error($cart->getError());
+    }
+
+    /**
+     * 加入购物车
+     */
+    public function cart_add($id, $num = 1)
+    {
+        $cart = model('common/business/Cart');
+        $record = $cart->where('busid', '=', $this->user->id)
+            ->where('proid', '=', $id)
+            ->find();
+        if ($record) {
+            $num = $record->num + $num;
+            if ($num < 0) {
+                $num = 0;
+            }
+            $result = $record->save(['num' => $num], ['id' => $record->id]);
+            if ($result) {
+                $this->success("操作成功", $this->cart_model->where('busid', '=', $this->user->id)->sum("num"));
+            }
+            $this->error("操作失败");
+        }
+        if ($num < 0) {
+            $this->error("操作失败");
+        }
+        $record = $cart->save([
+            "busid" => $this->user->id,
+            'proid' => $id,
+            'num' => $num
+        ]);
+        if ($record) {
+            $this->success("操作成功", $this->cart_model->where('busid', '=', $this->user->id)->sum("num"));
+        }
+        $this->error("操作失败");
+    }
+
+    /**
+     * 购物车
+     */
+    public function cart()
+    {
+
+        $data = $this->user->cart()->with(['product'])->select();;
+        $this->success("获取成功", $data);
+    }
+
+    /**
+     * 收藏商品
+     * @param $id int 商品id
+     * @param $star bool 收藏
+     */
+    public function shop_star($id, $star)
+    {
+        $collection = model('common/business/Collection');
+        $record = $collection->where('busid', '=', $this->user->id)
+            ->where('proid', '=', $id)
+            ->find();
+        if ($star) {
+            if (empty($record)) {
+                $record = $collection->save([
+                    "busid" => $this->user->id,
+                    'proid' => $id
+                ]);
+            }
+            if (empty($record)) {
+                $this->error("收藏失败");
+            }
+            $this->success("收藏成功");
+        }
+        $record->delete();
+        $this->success("取消收藏");
+    }
+
+    /**
+     * 分类
+     */
+    public function category($id = null, $search = null, $flag = 0, $order = 0, $sort = 0, $page = 1, $size = 10)
+    {
+//        分类页面
+        if ($id == null) {
+            $recommend = [
+                "id" => 0,
+                "name" => "为你推荐",
+                "products" => $this->product_model
+                    ->where("status", '=', 1)
+                    ->order("createtime", "desc")
+                    ->limit(9)
+                    ->select()
+            ];
+            $category = $this->product_type_model
+//                ->with(['products' => function ($query) {
+//                    $query
+//                        ->where("status", '=', 1)
+//                        ->order("createtime", "desc")
+//                        ->limit(9);
+//                }])
+                ->order("weigh", "desc")
+                ->select();
+            for ($i = 0; $i < count($category); $i++) {
+                $category[$i]->setAttr('products', $this->product_model
+                    ->where("status", '=', 1)
+                    ->where("typeid", '=', $category[$i]->id)
+                    ->order("createtime", "desc")
+                    ->limit(9)->select()
+                );
+            }
+            array_unshift($category, $recommend);
+            $this->success("获取成功", $category);
+        }
+//        分类详情
+        if (!empty($search)) {
+            $this->product_model->where("name", 'like', "%" . $search . "%");
+        }
+        if (!empty($id)) {
+            $this->product_model->where("typeid", '=', $id);
+        }
+        if (!empty($flag)) {
+            $this->product_model->where("flag", '=', $flag);
+        }
+        if ($order == 0) {
+            $order = "createtime";
+        } else if ($order == 1) {
+            $order = "price";
+        } else if ($order == 2) {
+            $order = "stock";
+        }
+        if ($sort == 0) {
+            $sort = "desc";
+        } else if ($sort == 1) {
+            $sort = "asc";
+        }
+        $this->success("获取成功", $this->product_model
             ->where("status", '=', 1)
-            ->order("createtime", "desc")
-            ->page($page, $limit)
-            ->select();
-        $this->success($shops);
+            ->order($order, $sort)
+            ->page($page, $size)
+            ->select());
+    }
+
+    /**
+     * 分类列表
+     */
+    public function category_list()
+    {
+        $this->success("", $this->product_model->type()->field([
+            "id" => "value",
+            "name" => "text"
+        ])->select());
     }
 
     /**
@@ -176,7 +333,7 @@ class Shop extends ShopController
     public function profile()
     {
         if ($this->request->isGet()) {
-            $user = $this->user;
+            $user = $this->user->toArray();
             unset($user['password']);
             unset($user['salt']);
             $this->success("获取成功", $user);
@@ -210,13 +367,13 @@ class Shop extends ShopController
         if (empty($data['district'])) {
             unset($data['district']);
         }
-        if ($data['email'] != $this->user['email']) {
+        if ($data['email'] != $this->user->email) {
             $data['auth'] = 0;
         }
         $result = $this->business_model->isUpdate()->allowField(true)->save($data);
         if ($result) {
             if (!empty($avatar)) {
-                $path = "." . $this->user['avatar'];
+                $path = "." . $this->user->avatar;
                 is_file($path) and @unlink($path);
             }
             $this->success("保存成功");
@@ -231,7 +388,7 @@ class Shop extends ShopController
     {
 //        验证
         if (!empty($code)) {
-            $email_r = $this->user['email'];
+            $email_r = $this->user->email;
             if ($email_r != $email) {
                 $this->error("邮箱与账号绑定不符");
             }
@@ -244,7 +401,7 @@ class Shop extends ShopController
             $result = $this->business_model
                 ->isUpdate()
                 ->save([
-                    "id" => $this->user['id'],
+                    "id" => $this->user->id,
                     "auth" => 1
                 ]);
             if (!$result) {
@@ -259,7 +416,7 @@ class Shop extends ShopController
             $this->success("验证成功");
         }
 //        发送
-        $email = $this->user["email"];
+        $email = $this->user->email;
         $code = randstr(5);
         $model = model("common/ems");
         $data = [
@@ -285,6 +442,75 @@ class Shop extends ShopController
             $this->success("邮件发送成功");
         } else {
             $this->error($emailInstance->getError());
+        }
+    }
+
+    /**
+     * 收货地址
+     */
+    public function address($action = null, $id = null)
+    {
+        switch ($action) {
+            case "save":
+                $data = $this->request->param();
+                $area = $data['area'];
+                if (empty($area)) {
+                    $this->error("请选择地区");
+                }
+                $record = model("common/Region")->where("code", "=", $area)->find();
+                if (empty($record)) {
+                    $this->error("地区码错误");
+                }
+                $codes = explode(",", $record['parentpath']);
+                $data['province'] = $codes[0];
+                $data['city'] = $codes[1];
+                $data['district'] = $codes[2];
+                $data['busid'] = $this->user->id;
+                $model = $this->address_model;
+                Db::startTrans();
+                if ($data['status'] == 1) {
+                    $result = $model
+                        ->where('busid', '=', $this->user->id)
+                        ->update([
+                            "status" => 0
+                        ]);
+                    if ($result === false) {
+                        $this->error($model->getError());
+                    }
+                }
+                if (!empty($data['id'])) {
+                    $model->isUpdate();
+                }
+                $result = $model->allowField(true)->save($data);
+                if ($result === false) {
+                    $this->error($model->getError());
+                }
+                Db::commit();
+                $this->success("操作成功", $data);
+                break;
+            case "detail":
+                $data = $this->address_model
+                    ->where('busid', '=', $this->user->id)
+                    ->find($id);
+                if (empty($data)) {
+                    $this->error("该记录不存在");
+                }
+                $this->success("获取成功", $data);
+                break;
+            case "delete":
+                $result = $this->address_model
+                    ->where('busid', '=', $this->user->id)
+                    ->delete($id);
+                if ($result) {
+                    $this->success();
+                }
+                $this->error("删除失败，未找到该记录");
+                break;
+            default:
+                $data = $this->address_model
+                    ->where('busid', '=', $this->user->id)
+                    ->select();
+                $this->success("获取成功", $data);
         }
     }
 }

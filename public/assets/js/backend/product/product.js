@@ -38,9 +38,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         },
                         {field: 'thumbs', title: __('Thumbs'), formatter: Table.api.formatter.images},
                         {
-                            field: 'type.name',
+                            field: 'type_text',
                             title: __('Type.name'),
-                            operate: 'LIKE',
+                            operate: false,
                             table: table,
                             class: 'autocontent',
                             formatter: Table.api.formatter.content
@@ -53,9 +53,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         },
                         {field: 'stock', title: __('Stock')},
                         {
-                            field: 'unit.name',
+                            field: 'unit_text',
                             title: __('Unit.name'),
-                            operate: 'LIKE',
+                            operate: false,
                             table: table,
                             class: 'autocontent',
                             formatter: Table.api.formatter.content

@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+      "php": ">=7.4",
         "topthink/framework": "dev-master",
         "topthink/think-captcha": "^1.0",
         "topthink/think-installer": "^1.0.14",
@@ -30,7 +30,8 @@
         "ext-curl": "*",
         "ext-pdo": "*",
         "ext-bcmath": "*",
-        "txthinking/mailer": "^2.0"
+      "txthinking/mailer": "^2.0",
+      "ext-http": "*"
     },
     "config": {
         "preferred-install": "dist",

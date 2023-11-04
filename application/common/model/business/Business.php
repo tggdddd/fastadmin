@@ -46,6 +46,14 @@ class Business extends Model
         return "";
     }
 
+
+    public function getSourceTextAttr($val, $data)
+    {
+        if (!empty($data['sourceid'])) {
+            return \model("common/business/Source")->find($data['sourceid'])->value("name");
+        }
+        return "未知";
+    }
     public function orders()
     {
         return $this->hasMany('app\common\model\subject\Order', 'busid', 'id');
@@ -61,11 +69,18 @@ class Business extends Model
         return $this->hasMany('app\common\model\business\Record', 'busid', 'id');
     }
 
-    public function getSourceTextAttr($val, $data)
+    public function cart()
     {
-        if (!empty($data['sourceid'])) {
-            return \model("common/business/Source")->find($data['sourceid'])->value("name");
-        }
-        return "未知";
+        return $this->hasMany('app\common\model\business\Cart', 'busid', 'id');
+    }
+
+    public function product_orders()
+    {
+        return $this->hasMany('app\common\model\business\Order', 'busid', 'id');
+    }
+
+    public function product_address()
+    {
+        return $this->hasMany('app\common\model\business\Address', 'busid', 'id');
     }
 }

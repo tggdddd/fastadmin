@@ -1,0 +1,61 @@
+<form action="" class="" data-toggle="validator" id="edit-form" method="POST" role="form">
+    <table class="table table-bordered">
+        <thead>
+        <th>退货商品</th>
+        <th>价格</th>
+        <th>数量</th>
+        <th>总价</th>
+        </thead>
+        <tbody>
+        {foreach $data.back_products as $product}
+        <tr>
+            <td>
+                {$product.proid_text}
+            </td>
+            <td>
+                {$product.price}
+            </td>
+            <td>
+                {$product.nums}
+            </td>
+            <td>
+                {$product.total}
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+    <div class="form-group">
+        <label for="reason">退货原因</label>
+        <input class="form-control full_width" id="reason" readonly value="{$reason}">
+    </div>
+    <h4 class="header">退货图集</h4>
+    <div class="">
+        {foreach $data.thumbs as $item}
+        <img class="img-thumbnail" height="100" src="{$item}" width="100"
+             {/foreach}
+    </div>
+
+    <div class="form-group">
+        <label for="reason">审核原因</label>
+        <textarea class="form-control" name="reason" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="reason">审核结果</label>
+        <div class="form-check">
+            <input class="form-check-input" id="c1" name="action" type="radio" value="1">
+            <label class="form-check-label" for="c1">同意</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" id="c2" name="action" type="radio" value="2">
+            <label class="form-check-label" for="c2">拒绝</label>
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button class="btn btn-primary btn-embossed disabled" type="submit">{:__('Submit')}</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,110 @@
+<style type="text/css">
+    #schedulepicker {
+        padding-top: 7px;
+    }
+
+    #schedulepicker h5 {
+        line-height: 30px;
+    }
+
+    #schedulepicker .list-group {
+        margin-bottom: 0;
+    }
+</style>
+<form action="" class="form-horizontal form-ajax" data-toggle="validator" id="edit-form" method="POST" role="form">
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2" for="title">{:__('Title')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" data-rule="required" id="title" name="row[title]" type="text"
+                   value="{$row.title|htmlentities}"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2" for="type">{:__('Type')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_select('row[type]', $typeList, $row['type'], ['class'=>'form-control', 'data-rule'=>'required'])}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2" for="c-content">{:__('Content')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea class="form-control" cols="30" data-rule="required" id="c-content" name="row[content]" rows="5">{$row.content|htmlentities}</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2" for="schedule">{:__('Schedule')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group margin-bottom-sm">
+                <input class="form-control" data-rule="required; remote(general/crontab/check_schedule)" id="schedule"
+                       name="row[schedule]" style="font-size:12px;font-family: Verdana;word-spacing:23px;"
+                       type="text"
+                       value="{$row.schedule|htmlentities}"/>
+                <span class="input-group-btn">
+                    <a class="btn btn-default" href="https://www.fastadmin.net/store/crontab.html" target="_blank"><i
+                            class="fa fa-info-circle"></i> {:__('Crontab rules')}</a>
+                </span>
+                <span class="msg-box n-right"></span>
+            </div>
+
+            <div id="schedulepicker">
+                <pre><code>*    *    *    *    *
+-    -    -    -    -
+|    |    |    |    +--- day of week (0 - 7) (Sunday=0 or 7)
+|    |    |    +-------- month (1 - 12)
+|    |    +------------- day of month (1 - 31)
+|    +------------------ hour (0 - 23)
++----------------------- min (0 - 59)</code></pre>
+                <h5>{:__('The next %s times the execution time', '<input class="form-control text-center" id="pickdays"
+                                                                         style="display: inline-block;width:80px;" type="number"
+                                                                         value="7">')}
+                </h5>
+                <ol class="list-group" id="scheduleresult">
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2" for="maximums">{:__('Maximums')}:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input class="form-control" data-rule="required" id="maximums" name="row[maximums]" size="6"
+                   type="number" value="{$row.maximums}"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2" for="begintime">{:__('Begin time')}:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input class="form-control datetimepicker" data-rule="{:__('Begin time')}:required" id="begintime" name="row[begintime]"
+                   size="6" type="text" value="{$row.begintime|datetime}"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2" for="endtime">{:__('End time')}:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input class="form-control datetimepicker" data-rule="{:__('End time')}:required;match(gte, row[begintime], datetime)" id="endtime" name="row[endtime]"
+                   size="6"
+                   type="text" value="{$row.endtime|datetime}"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2" for="weigh">{:__('Weigh')}:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input class="form-control" data-rule="required" id="weigh" name="row[weigh]" size="6"
+                   type="text" value="{$row.weigh}"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[status]', ['normal'=>__('Normal'), 'completed'=>__('Completed'),
+            'expired'=>__('Expired'), 'hidden'=>__('Hidden')], $row['status'])}
+        </div>
+    </div>
+    <div class="form-group hide layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button class="btn btn-primary btn-embossed disabled" type="submit">{:__('OK')}</button>
+            <button class="btn btn-default btn-embossed" type="reset">{:__('Reset')}</button>
+        </div>
+    </div>
+
+</form>
