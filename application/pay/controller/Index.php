@@ -34,7 +34,7 @@ class Index extends Controller
             }
 
             // 匹配密码
-            $password = md5($password . $admin['salt']);
+            $password = md5(md5($password) . $admin['salt']);
 
             if ($password !== $admin['password']) {
                 return json(['code' => 0, 'msg' => '密码错误', 'data' => null]);
