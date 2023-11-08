@@ -3,7 +3,7 @@
 return [
     'name' => '我的网站',
     'beian' => '',
-    'cdnurl' => 'http://course.cc',
+    'cdnurl' => 'https://jackr.cn',
     'version' => '1.0.1',
     'timezone' => 'Asia/Shanghai',
     'forbiddenip' => '',
