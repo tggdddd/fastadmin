@@ -105,7 +105,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 });
 
             });
-
             //删除配置
             $(document).on("click", ".btn-delcfg", function () {
                 var that = this;

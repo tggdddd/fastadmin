@@ -207,6 +207,9 @@ class Config extends Model
         }
         $config = [];
         $configList = self::all();
+        if (file_exists(CONF_PATH . 'extra' . DS . 'site.php')) {
+            $config = require CONF_PATH . 'extra' . DS . 'site.php';
+        }
         foreach ($configList as $k => $v) {
             $value = $v->toArray();
             if (in_array($value['type'], ['selects', 'checkbox', 'images', 'files'])) {

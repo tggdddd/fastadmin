@@ -153,11 +153,43 @@ class Business extends Home
             if (empty($money) || $money <= 0) {
                 $this->error("错误的参数");
             }
-            $this->error("服务器异常");
+            $host = trim(config("site.cdnurl"), "/");
+            $param = [
+                "name" => "充值",
+                "third" => json_encode(["busid" => $loginInfo->id]),
+                "originalprice" => $money,
+                "paypage" => 1,
+                "reurl" => $host . "/home/business/pay_result",
+                "callbackurl" => $host . "/home/business/callback",
+                "wxcode" => config("site.pay.wx"),
+                "zfbcode" => config("site.pay.zfb")];
+            $result = httpRequest($host . "/pay/index/create", $param, $error);
+            if (!empty($error)) {
+                $this->error($error);
+            }
+            if (empty($result) && empty($result["code"])) {
+                $this->error(empty($result) ? "服务器异常" : $result["msg"]);
+            }
+            return $result;
         }
         return $this->fetch();
     }
 
+    /**
+     * 支付跳转
+     */
+    public function pay_result()
+    {
+        $this->success("支付成功", url("/home/business/recharge"));
+    }
+
+    /**
+     * 支付回调
+     */
+    public function callback()
+    {
+
+    }
     /**
      * 留言
      * @return mixed

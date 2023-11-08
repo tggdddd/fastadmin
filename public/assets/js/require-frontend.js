@@ -1,4 +1,5 @@
 require.config({
+    urlArgs: "v=" + requirejs.s.contexts._.config.config.site.version,
     packages: [{
         name: 'moment',
         location: '../libs/moment',

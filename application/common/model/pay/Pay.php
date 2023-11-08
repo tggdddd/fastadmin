@@ -7,7 +7,7 @@ use think\Model;
 class Pay extends Model
 {
     // 表名
-    protected $name = 'pay';
+    protected $table = 'pre_pay';
 
     // 自动写入时间戳字段
     protected $autoWriteTimestamp = 'integer';

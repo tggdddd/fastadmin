@@ -154,7 +154,6 @@ class Index extends Controller
             ];
 
             $result = $this->PayModel->validate('common/pay/Pay')->save($data);
-
             if ($result === false) {
                 return json(['code' => 0, 'msg' => $this->PayModel->getError(), 'data' => null]);
             } else {

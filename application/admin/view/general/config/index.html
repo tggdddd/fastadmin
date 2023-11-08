@@ -172,7 +172,7 @@
                                 </td>
                                 {if $Think.config.app_debug}
                                 <td>{php}echo "{\$site.". $item['name'] . "}";{/php}</td>
-                                <td>{if $item['id']>18}<a href="javascript:;" class="btn-delcfg text-muted" data-name="{$item.name}"><i class="fa fa-times"></i></a>{/if}</td>
+                                <td>{if $item['id']>18}<a class="delcfg text-muted" data-name="{$item.name}" href="javascript:;"><i class="fa fa-times"></i></a>{/if}</td>
                                 {/if}
                             </tr>
                             {/foreach}
