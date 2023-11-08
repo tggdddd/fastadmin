@@ -18,7 +18,7 @@ return [
         'title' => 'secret',
         'type' => 'string',
         'content' => [],
-        'value' => '8af9352594b5b2350787dab471003b98',
+        'value' => 'edbd15354223ea4644c7dea739bbfe68',
         'rule' => 'required',
         'msg' => '',
         'tip' => '',
