@@ -1,9 +1,11 @@
 <?php
 
+use think\Env;
+
 return [
     'name' => '我的网站',
     'beian' => '',
-    'cdnurl' => 'https://jackr.cn',
+    'cdnurl' => Env::get('site.cdnurl', 'http://course.cc'),
     'version' => '1.0.1',
     'timezone' => 'Asia/Shanghai',
     'forbiddenip' => '',
