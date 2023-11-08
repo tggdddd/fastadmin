@@ -2,7 +2,6 @@
 /thinkphp/
 /vendor/
 /runtime/*
-/addons/*
 /public/assets/libs/
 /public/assets/addons/*
 .idea
