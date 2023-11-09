@@ -66,14 +66,13 @@ class Index extends Controller
 
             $paytime = $this->request->param('paytime', '', 'trim');
 
-            $admin = $this->AdminModel->find($adminid);
-
-            if (!$admin) {
-                return json(['code' => 0, 'msg' => '账号不存在', 'data' => null]);
-            }
-            if ($admin['status'] !== 'normal') {
-                return json(['code' => 0, 'msg' => '账号已被禁用', 'data' => null]);
-            }
+//            $admin = $this->AdminModel->find($adminid);
+//            if (!$admin) {
+//                return json(['code' => 0, 'msg' => '账号不存在', 'data' => null]);
+//            }
+//            if ($admin['status'] !== 'normal') {
+//                return json(['code' => 0, 'msg' => '账号已被禁用', 'data' => null]);
+//            }
 
             $pay = $this->PayModel->where(['price' => $price, 'status' => 0])->find();
 
