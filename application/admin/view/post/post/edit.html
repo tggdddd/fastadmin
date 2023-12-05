@@ -1,0 +1,62 @@
+<form action="" class="form-horizontal" data-toggle="validator" id="edit-form" method="POST" role="form">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" id="c-title" name="row[title]" type="text" value="{$row.title|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea class="form-control editor" cols="50" id="c-content" name="row[content]" rows="5">{$row.content|htmlentities}</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Point')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" id="c-point" name="row[point]" type="number" value="{$row.point|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+
+            <div class="radio">
+                {foreach name="statusList" item="vo"}
+                <label for="row[status]-{$key}"><input id="row[status]-{$key}" name="row[status]" name="key"
+                                                       type="radio" value="{$key}" value="$row.status" {in }checked{/in}
+                    /> {$vo}</label>
+                {/foreach}
+            </div>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Busid')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" id="c-busid" min="0" name="row[busid]" type="number"
+                   value="{$row.busid|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Accept')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" id="c-accept" min="0" name="row[accept]" type="number"
+                   value="{$row.accept|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Cateid')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" id="c-cateid" min="0" name="row[cateid]" type="number"
+                   value="{$row.cateid|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button class="btn btn-primary btn-embossed disabled" type="submit">{:__('OK')}</button>
+        </div>
+    </div>
+</form>

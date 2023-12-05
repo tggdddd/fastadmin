@@ -1,11 +1,9 @@
 <?php
 
-use think\Env;
-
 return array(
     'name' => '我的网站',
     'beian' => '',
-    'cdnurl' => Env::get("site.cdnurl", "http://course.cc"),
+    'cdnurl' => \think\Env::get("site.cdnurl", "http://course.cc"),
     'version' => '1.0.1',
     'timezone' => 'Asia/Shanghai',
     'forbiddenip' => '',
@@ -17,18 +15,18 @@ return array(
     'fixedpage' => 'dashboard',
     'categorytype' =>
         array(
-            'default' => 'Default',
-            'page' => 'Page',
-            'article' => 'Article',
+            'default' => '默认',
+            'page' => '单页',
+            'article' => '文章',
             'test' => 'Test',
         ),
     'configgroup' =>
         array(
-            'basic' => 'Basic',
-            'email' => 'Email',
-            'dictionary' => 'Dictionary',
-            'user' => 'User',
-            'example' => 'Example',
+            'basic' => '基础配置',
+            'email' => '邮件配置',
+            'dictionary' => '字典配置',
+            'user' => '会员配置',
+            'example' => '示例分组',
         ),
     'mail_type' => '1',
     'mail_smtp_host' => 'smtp.10086.cn',
@@ -39,10 +37,17 @@ return array(
     'mail_from' => '15014586591@139.com',
     'attachmentcategory' =>
         array(
-            'category1' => 'Category1',
-            'category2' => 'Category2',
-            'custom' => 'Custom',
+            'category1' => '分类一',
+            'category2' => '分类二',
+            'custom' => '自定义',
         ),
     'pay.wx' => '/uploads/20231108/dbb433805f2e8c0bb202c7758cfefff8.png',
     'pay.zfb' => '/uploads/20231108/71a747b783a2304bc740eadfcf154a40.jpg',
+    'hotel_tag' =>
+        array(
+            0 => '推广优惠',
+            1 => '月租惠选',
+            2 => '满减优惠',
+            3 => '节假日优惠',
+        ),
 );

@@ -13,6 +13,7 @@ class AskController
 
     /*token标识*/
     protected $token_key = "token";
+    protected $token_header = "AUTHORIZATION";
     /*用户模型*/
     protected $business_model = null;
     /*登录用户*/
@@ -50,7 +51,13 @@ class AskController
     protected function auth($must = false)
     {
         //获取token
-        $token = $this->request->param($this->token_key);
+        $token = $this->request->header($this->token_header);
+        if (empty($token)) {
+            $token = $this->request->header("http_authorization");
+        }
+        if (empty($token)) {
+            $token = $this->request->param($this->token_key);
+        }
         $this->token = $token;
         if (empty($token)) {
             return $this->auth_reduce(false, $must);

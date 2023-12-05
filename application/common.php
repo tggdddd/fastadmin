@@ -601,6 +601,13 @@ if (!function_exists('randstr')) {
     }
 }
 if (!function_exists("upload_simple")) {
+    /**
+     * 简单上传单个文件
+     * @param $file
+     * @param $path
+     * @param $includePath
+     * @return array[success,error,path]
+     */
     function upload_simple($file, $path = ROOT_PATH . "public/uploads/", $includePath = false): array
     {
         $info = $file->move($path);
@@ -797,6 +804,7 @@ if (!function_exists('httpRequest')) {
             curl_close($curl);
             return $output;
         } else {
+            $error = "未启动curl_init模块";
             return false;
         }
     }

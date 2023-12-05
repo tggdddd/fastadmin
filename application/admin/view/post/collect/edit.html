@@ -1,0 +1,23 @@
+<form action="" class="form-horizontal" data-toggle="validator" id="edit-form" method="POST" role="form">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Busid')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" id="c-busid" min="0" name="row[busid]" type="number"
+                   value="{$row.busid|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Postid')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input class="form-control" id="c-postid" min="0" name="row[postid]" type="number"
+                   value="{$row.postid|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button class="btn btn-primary btn-embossed disabled" type="submit">{:__('OK')}</button>
+        </div>
+    </div>
+</form>

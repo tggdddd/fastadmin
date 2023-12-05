@@ -96,7 +96,7 @@ class Index extends Controller
 
             // 获取更新后的订单数据
             $UpdatePayData = $this->PayModel->find($pay['id']);
-
+            HttpRequest($UpdatePayData->callbackurl, $UpdatePayData);
             return json(['code' => 1, 'msg' => '查询成功', 'data' => $UpdatePayData]);
         }
     }
@@ -114,7 +114,7 @@ class Index extends Controller
                         third => json {busid:15，order_code:xxxxx} 多个参数
                         paytype 0 =》 wx 1 =》 支付宝
                         originalprice
-                        paypage => 0 => 默认收银台（html） 1 => 返回json数据
+                        paypage => 1 => 默认收银台（html） 0 => 返回json数据
                         reurl
                         callbackurl
                         wxcode
