@@ -28,6 +28,7 @@ function exec_command($command)
     exit;
 }
 
+echoi("执行用户" . `whoami` . "\n");
 echoi("开始更新\n");
 echoi("当前工作目录：" . getcwd() . "\n");
 echoi("环境变量：" . var_dump($_ENV) . "\n");

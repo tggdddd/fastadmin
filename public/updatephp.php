@@ -28,6 +28,7 @@ function exec_command($command)
     exit;
 }
 
+echoi("执行用户" . `whoami` . "\n");
 echoi("开始更新\n");
 exec_command("git fetch");
 exec_command("git reset --hard origin/master");
