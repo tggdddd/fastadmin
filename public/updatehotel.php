@@ -17,7 +17,9 @@ function exec_command($command)
     if ($exit_code == 0) {
         return true;
     }
-    echo "{$command}执行失败，退出代码:{$exit_code}" . $eof;
+    $errorOutput = stream_get_contents($process);
+    echo "{$command}执行失败{$eof}退出代码:{$exit_code}" . $eof;
+    echo "错误信息：{$errorOutput}" . $eof;
     exit;
 }
 
