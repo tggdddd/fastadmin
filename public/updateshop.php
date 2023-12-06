@@ -22,6 +22,7 @@ echoi("当前工作目录：" . getcwd() . "\n");
 echoi("环境变量：" . var_dump($_ENV) . "\n");
 exec_command("git fetch");
 exec_command("git reset --hard origin/master");
+exec_command("git pull");
 exec_command("npm i");
 exec_command("npm run build");
 echoi("更新完成\n");

@@ -1,7 +1,7 @@
 <?php
 ini_set("max_execution_time", 0);
 ini_set("ignore_user_abort", true);
-$path = "../../../shop.jackr.cn";
+$path = "../";
 chdir($path);
 $path = getcwd();
 function echoi($str)
