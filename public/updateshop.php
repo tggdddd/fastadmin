@@ -1,5 +1,7 @@
 <?php
 echo "开始更新";
+ini_set("max_execution_time", 0);
+ini_set("ignore_user_abort", true);
 chdir("../../../shop.jackr.cn");
 echo `git fetch`;
 echo `git reset --hard origin/master`;
