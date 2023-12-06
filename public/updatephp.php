@@ -13,12 +13,12 @@ function exec_command($command)
         $output = fread($process, 1024);
         echo $output;
     }
+    $errorOutput = stream_get_contents($process);
     $exit_code = pclose($process);
     echo $eof;
     if ($exit_code == 0) {
         return true;
     }
-    $errorOutput = stream_get_contents($process);
     echo "{$command}执行失败{$eof}退出代码:{$exit_code}" . $eof;
     echo "错误信息：{$errorOutput}" . $eof;
     exit;
