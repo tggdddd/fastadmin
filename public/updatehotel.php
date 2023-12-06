@@ -21,10 +21,10 @@ function exec_command($command)
     exit;
 }
 
-echo "开始更新";
+echo "开始更新" . $eof;
 exec_command("git fetch");
 exec_command("git reset --hard origin/master");
 exec_command("npm i");
 exec_command("npm run build");
-echo "更新完成";
+echo "更新完成" . $eof;
 
