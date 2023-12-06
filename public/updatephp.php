@@ -1,7 +1,7 @@
 <?php
 echo "开始更新";
-`git fetch`;
-`git reset --hard origin/master`;
-`git pull`;
+echo `git fetch`;
+echo `git reset --hard origin/master`;
+echo `git pull`;
 echo "更新完成";
 
