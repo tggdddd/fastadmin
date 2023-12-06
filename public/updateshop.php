@@ -29,6 +29,7 @@ echo "环境变量：" . var_dump($_ENV) . $eof;
 exec_command("git fetch");
 exec_command("git reset --hard origin/master");
 exec_command("npm i");
+exec_command("vite");
 exec_command("npm run build");
 echo "更新完成" . $eof;
 
