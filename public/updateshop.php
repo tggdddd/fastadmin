@@ -24,6 +24,8 @@ function exec_command($command)
 }
 
 echo "开始更新" . $eof;
+echo "当前工作目录：" . getcwd() . $eof;
+echo "环境变量：" . print_r($_ENV, true) . $eof;
 exec_command("git fetch");
 exec_command("git reset --hard origin/master");
 exec_command("npm i");
