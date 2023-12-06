@@ -35,6 +35,5 @@ exec_command("git fetch");
 exec_command("git reset --hard origin/master");
 exec_command("npm i");
 exec_command("npm run build");
-exec_command("chmod 777 -R *");
 echoi("更新完成\n");
 
