@@ -1,33 +1,40 @@
 <?php
-
 ini_set("max_execution_time", 0);
 ini_set("ignore_user_abort", true);
-chdir("../../../ask.jackr.cn");
+$path = "../../../ask.jackr.cn";
+chdir($path);
+$path = getcwd();
 $eof = php_sapi_name() == "cli" ? "\n" : "<br/>";
+
+function echoi($str)
+{
+    echo php_sapi_name() == "cli" ? $str : str_replace("\n", "<br/>", $str);
+}
 function exec_command($command)
 {
     global $eof;
-    echo "执行命令:$command" . $eof;
-    $process = popen($command, "r");
+    echoi("执行命令:$command\n");
+    $process = popen($command . "  2>&1", "r");
     while (!feof($process)) {
         $output = fread($process, 1024);
-        echo $output;
+        echoi($output);
     }
-    $errorOutput = stream_get_contents($process);
     $exit_code = pclose($process);
-    echo $eof;
+    echoi("\n");
     if ($exit_code == 0) {
         return true;
     }
-    echo "{$command}执行失败{$eof}退出代码:{$exit_code}" . $eof;
-    echo "错误信息：{$errorOutput}" . $eof;
+    echoi("{$command}执行失败{$eof}退出代码:{$exit_code}\n");
     exit;
 }
 
-echo "开始更新" . $eof;
+echoi("开始更新\n");
+echoi("当前工作目录：" . getcwd() . "\n");
+echoi("环境变量：" . var_dump($_ENV) . "\n");
 exec_command("git fetch");
 exec_command("git reset --hard origin/master");
 exec_command("npm i");
 exec_command("npm run build");
-echo "更新完成" . $eof;
+exec_command("chmod 777 -R *");
+echoi("更新完成\n");
 

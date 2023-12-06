@@ -1,31 +1,35 @@
 <?php
-
 ini_set("max_execution_time", 0);
 ini_set("ignore_user_abort", true);
-chdir("../");
+$path = "../../../shop.jackr.cn";
+chdir($path);
+$path = getcwd();
 $eof = php_sapi_name() == "cli" ? "\n" : "<br/>";
+
+function echoi($str)
+{
+    echo php_sapi_name() == "cli" ? $str : str_replace("\n", "<br/>", $str);
+}
 function exec_command($command)
 {
     global $eof;
-    echo "执行命令:$command" . $eof;
-    $process = popen($command, "r");
+    echoi("执行命令:$command\n");
+    $process = popen($command . "  2>&1", "r");
     while (!feof($process)) {
         $output = fread($process, 1024);
-        echo $output;
+        echoi($output);
     }
-    $errorOutput = stream_get_contents($process);
     $exit_code = pclose($process);
-    echo $eof;
+    echoi("\n");
     if ($exit_code == 0) {
         return true;
     }
-    echo "{$command}执行失败{$eof}退出代码:{$exit_code}" . $eof;
-    echo "错误信息：{$errorOutput}" . $eof;
+    echoi("{$command}执行失败{$eof}退出代码:{$exit_code}\n");
     exit;
 }
 
-echo "开始更新" . $eof;
+echoi("开始更新\n");
 exec_command("git fetch");
 exec_command("git reset --hard origin/master");
-echo "更新完成" . $eof;
+echoi("更新完成\n");
 
