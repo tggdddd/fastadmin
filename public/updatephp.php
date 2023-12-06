@@ -3,18 +3,22 @@
 ini_set("max_execution_time", 0);
 ini_set("ignore_user_abort", true);
 chdir("../");
+$eof = php_sapi_name() == "cli" ? "\n" : "<br/>";
 function exec_command($command)
 {
+    global $eof;
+    echo "执行命令:$command" . $eof;
     $process = popen($command, "r");
     while (!feof($process)) {
         $output = fread($process, 1024);
         echo $output;
     }
     $exit_code = pclose($process);
+    echo $eof;
     if ($exit_code == 0) {
         return true;
     }
-    echo "{$command}执行失败，退出代码:{$exit_code}";
+    echo "{$command}执行失败，退出代码:{$exit_code}" . $eof;
     exit;
 }
 
