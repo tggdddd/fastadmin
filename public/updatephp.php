@@ -4,28 +4,14 @@ ini_set("ignore_user_abort", true);
 $path = "../../../shop.jackr.cn";
 chdir($path);
 $path = getcwd();
-$eof = php_sapi_name() == "cli" ? "\n" : "<br/>";
-
 function echoi($str)
 {
     echo php_sapi_name() == "cli" ? $str : str_replace("\n", "<br/>", $str);
 }
 function exec_command($command)
 {
-    global $eof;
     echoi("执行命令:$command\n");
-    $process = popen($command . "  2>&1", "r");
-    while (!feof($process)) {
-        $output = fread($process, 1024);
-        echoi($output);
-    }
-    $exit_code = pclose($process);
-    echoi("\n");
-    if ($exit_code == 0) {
-        return true;
-    }
-    echoi("{$command}执行失败{$eof}退出代码:{$exit_code}\n");
-    exit;
+    echoi(`$command 2>&1`);
 }
 
 echoi("执行用户" . `whoami` . "\n");
