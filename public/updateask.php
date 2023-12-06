@@ -16,10 +16,11 @@ function exec_command($command)
     echoi(`$command 2>&1`);
 }
 
-echoi("执行用户" . `whoami` . "\n");
+
 echoi("开始更新\n");
+echoi("执行用户" . `whoami` . "\n");
 echoi("当前工作目录：" . getcwd() . "\n");
-echoi("环境变量：" . var_dump($_ENV) . "\n");
+echoi("环境变量：" . var_dump(getenv()) . "\n");
 exec_command("git fetch");
 exec_command("git reset --hard origin/master");
 exec_command("npm i");
