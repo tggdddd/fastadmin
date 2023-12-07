@@ -1,4 +1,6 @@
 <?php
+ini_set("ignore_user_abort", false);
+ini_set("max_execution_time", 120);
 function detect($lock, $seek)
 {
     if (file_exists($lock) && file_get_contents($lock) != $seek) {
@@ -9,7 +11,7 @@ function detect($lock, $seek)
 
 function lock($lock)
 {
-    $seek = rand(0, 99);
+    $seek = rand(0, 99) . "lock";
     detect($lock, $seek);
     file_put_contents($lock, $seek);
     return $seek;
@@ -31,7 +33,6 @@ for ($i = 0; $i < 7; $i++) {
     sleep(rand(3, 10));
     detect($lock, $seek);
 }
-ini_set("ignore_user_abort", true);
 $path = realpath("../../../hotel.jackr.cn");
 $script = __DIR__ . "/update.sh";
 echoi("开始更新\n");
