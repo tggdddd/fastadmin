@@ -21,8 +21,9 @@ function echoi($str)
 lock();
 ini_set("ignore_user_abort", true);
 $path = realpath("../../../ask.jackr.cn");
+$current = __DIR__;
 echoi("工作目录{$path}\n");
 echoi("开始更新\n");
-echoi(`sh update.php $path 2>&1`);
+echoi(`cd $current&&sh update.php $path 2>&1`);
 echoi("更新完成\n");
 unlock();
