@@ -3,11 +3,11 @@ function lock()
 {
     $lock = __FILE__ . "lock";
     if (file_exists($lock)) {
+        echo "请勿多次请求";
         exit;
     }
     touch($lock);
 }
-
 function unlock()
 {
     $lock = __FILE__ . "lock";
