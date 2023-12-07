@@ -1,4 +1,6 @@
 <?php
+ini_set("ignore_user_abort", true);
+ini_set("max_execution_time", 0);
 function echoi($str)
 {
     echo php_sapi_name() == "cli" ? $str : str_replace("\n", "<br/>", $str);
