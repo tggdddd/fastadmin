@@ -4,15 +4,25 @@ namespace app\common\model\hotel;
 
 use think\Model;
 
-class CouponList extends Model
+class CouponReceive extends Model
 {
     // 表名
-    protected $name = 'hotel_coupon_list';
-    protected $append = [];
-
+    protected $name = 'hotel_coupon_receive';
+    protected $append = [
+        "status_text",
+        'createtime_text'
+    ];
     protected $autoWriteTimestamp = true;
     protected $createTime = 'createtime';
     protected $updateTime = false;
+
+    public function getCreatetimeTextAttr($value, $data)
+    {
+        if (empty($data['createtime'])) {
+            return "";
+        }
+        return date('Y-m-d H:i', $data['createtime']);
+    }
 
     public function getStatusTextAttr($val, $data)
     {
@@ -26,11 +36,11 @@ class CouponList extends Model
 
     public function coupon()
     {
-        return $this->hasMany("app/common/model/hotel/Coupon", "cid", "id");
+        return $this->hasOne("app\common\model\hotel\Coupon", "id", "cid");
     }
 
     public function business()
     {
-        return $this->hasMany("app/common/model/business/Business", "busid", "id");
+        return $this->hasOne("app\common\model\business\Business", "id", "busid");
     }
 }

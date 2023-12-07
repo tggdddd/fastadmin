@@ -28,9 +28,9 @@ class Order extends Model
         ];
     }
 
-    public function couponStatus()
+    public function coupon()
     {
 //        TODO 待测试
-        return $this->hasManyThrough("app/common/model/hotel/CouponList", "app/common/model/hotel/Coupon", "id", "cid", "coupon_status");
+        return $this->hasManyThrough("app/common/model/hotel/CouponReceive", "app/common/model/hotel/Coupon", "id", "cid", "coupon_receive_id");
     }
 }

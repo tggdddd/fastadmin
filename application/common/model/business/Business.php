@@ -145,4 +145,12 @@ class Business extends Model
     {
         return $this->hasMany('app\common\model\hotel\Guest', "busid", "id");
     }
+
+    /**
+     * 酒店优惠券领取记录
+     */
+    public function hotelCouponReceive()
+    {
+        return $this->hasMany('app\common\model\hotel\CouponReceive', "busid", "id");
+    }
 }

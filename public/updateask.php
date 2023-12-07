@@ -7,8 +7,18 @@ foreach ($env as $k => $v) {
     putenv($k . "=" . $v);
 }
 
+function lock()
+{
+    file_exists("updateask") && exit;
+    file_put_contents("updateask", "");
+}
 
+function unlock()
+{
+    @unlink("updateask");
+}
 
+lock();
 ini_set("max_execution_time", 0);
 ini_set("ignore_user_abort", true);
 $path = "../../../ask.jackr.cn";
@@ -37,3 +47,4 @@ exec_command("npm i");
 exec_command("npm run build");
 echoi("更新完成\n");
 
+unlock();

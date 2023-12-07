@@ -13,12 +13,25 @@ class Business extends AskController
     protected $noNeedLogin = ['login', 'bind', 'register'];
     protected $payModel = null;
     protected $postModel = null;
+    protected $hotelCouponModel = null;
+    protected $hotelCouponReceiveModel = null;
+    protected $hotelGuestModel = null;
+    protected $hotelOrderModel = null;
+    protected $hotelRoomModel = null;
+
+    protected $hotelCollectModel = null;
 
     public function __construct()
     {
         parent::__construct();
         $this->payModel = model('pay.Pay');
         $this->postModel = model("common/post/Post");
+        $this->hotelCouponModel = model("common/hotel/Coupon");
+        $this->hotelCouponReceiveModel = model("common/hotel/CouponReceive");
+        $this->hotelGuestModel = model("common/hotel/Guest");
+        $this->hotelOrderModel = model("common/hotel/Order");
+        $this->hotelRoomModel = model("common/hotel/Room");
+        $this->hotelCollectModel = model("common/hotel/Collect");
     }
 
     /**
@@ -309,6 +322,21 @@ class Business extends AskController
                 return $r;
             }, $list);
         $result["count"] = $this->user->hotelGuest()->count();
+        $result["hasMore"] = $page * 30 < $result["count"];
+        $result["page"] = $page + 1;
+        $this->success("", $result);
+    }
+
+    /**
+     * 领取的优惠券列表
+     */
+    public function coupon_list($page = 1)
+    {
+        $result["list"] = $this->user->hotelCouponReceive()->with("coupon")
+            ->order("createtime desc")
+            ->page($page, 30)
+            ->select();
+        $result["count"] = $this->user->hotelCouponReceive()->count();
         $result["hasMore"] = $page * 30 < $result["count"];
         $result["page"] = $page + 1;
         $this->success("", $result);

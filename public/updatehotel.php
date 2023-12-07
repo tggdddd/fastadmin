@@ -6,7 +6,18 @@ $env = unserialize($data);
 foreach ($env as $k => $v) {
     putenv($k . "=" . $v);
 }
+function lock()
+{
+    file_exists("updatehotel") && exit;
+    file_put_contents("updatehotel", "");
+}
 
+function unlock()
+{
+    @unlink("updatehotel");
+}
+
+lock();
 ini_set("max_execution_time", 0);
 ini_set("ignore_user_abort", true);
 $path = "../../../hotel.jackr.cn";
@@ -35,3 +46,4 @@ exec_command("npm i");
 exec_command("npm run build");
 echoi("更新完成\n");
 
+unlock();
