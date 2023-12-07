@@ -1,16 +1,6 @@
 echo $1;
 cd $1
-
-if [ -f "update.lock" ];then
-  echo "文件存在"
-  exit
-  else
-    touch "update.lock"
-fi
-
-git fetch
-git reset --hard origin/master
-npm i
-npm run build
-
-rm -f /data/filename
+git fetch 2>&1
+git reset --hard origin/master 2>&1
+npm i 2>&1
+npm run build 2>&1
