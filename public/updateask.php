@@ -13,18 +13,18 @@ function unlock()
     $lock = __FILE__ . "lock";
     @unlink($lock);
 }
-
 function echoi($str)
 {
     echo php_sapi_name() == "cli" ? $str : str_replace("\n", "<br/>", $str);
 }
+
 lock();
 ini_set("ignore_user_abort", true);
 $path = realpath("../../../ask.jackr.cn");
-$current = __DIR__;
-echoi("当前目录{$current}\n");
-echoi("工作目录{$path}\n");
+$script = __DIR__ . "/update.sh";
 echoi("开始更新\n");
-echoi(`cd $current&&sh update.php $path 2>&1`);
+$command = "sh {$script} {$path} 2>&1";
+echoi("执行命令：$command\n");
+echoi(`$command`);
 echoi("更新完成\n");
 unlock();
