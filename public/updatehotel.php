@@ -11,12 +11,12 @@ function unlock()
     @unlink("updatehotel");
 }
 
-lock();
 if (php_sapi_name() != "cli") {
     $script = __FILE__;
-    `php {$script}`;
+    echo `php {$script}`;
     exit;
 }
+lock();
 
 ini_set("max_execution_time", 0);
 ini_set("ignore_user_abort", true);
