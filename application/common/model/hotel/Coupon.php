@@ -20,7 +20,7 @@ class Coupon extends Model
 
     public function statusList()
     {
-        return ['0' => '待使用', '1' => '已使用'];
+        return ['0' => '活动中', '1' => '已结束'];
     }
 
     public function getStatusTextAttr($val, $data)

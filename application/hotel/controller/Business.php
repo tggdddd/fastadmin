@@ -20,6 +20,7 @@ class Business extends AskController
     protected $hotelRoomModel = null;
 
     protected $hotelCollectModel = null;
+    protected $hotelOrderGuest = null;
 
     public function __construct()
     {
@@ -32,6 +33,7 @@ class Business extends AskController
         $this->hotelOrderModel = model("common/hotel/Order");
         $this->hotelRoomModel = model("common/hotel/Room");
         $this->hotelCollectModel = model("common/hotel/Collect");
+        $this->hotelOrderGuest = model("common/hotel/OrderGuest");
     }
 
     /**
@@ -330,15 +332,280 @@ class Business extends AskController
     /**
      * 领取的优惠券列表
      */
-    public function coupon_list($page = 1)
+    public function coupon_list($page = 1, $status = "-1")
     {
-        $result["list"] = $this->user->hotelCouponReceive()->with("coupon")
+        $where = [];
+        if (!empty($status) && $status != -1) {
+            $where['status'] = $status;
+        }
+        $result["list"] = $this->user->hotelCouponReceive()
+            ->with("coupon")
+            ->where($where)
             ->order("createtime desc")
             ->page($page, 30)
             ->select();
-        $result["count"] = $this->user->hotelCouponReceive()->count();
+        $result["count"] = $this->user->hotelCouponReceive()
+            ->where($where)
+            ->count();
         $result["hasMore"] = $page * 30 < $result["count"];
         $result["page"] = $page + 1;
         $this->success("", $result);
+    }
+
+    /**
+     * 酒店订单提交
+     */
+    public function submit_order($id, $enterTime, $leaveTime, $guest, $couponReceiveId = null)
+    {
+        if (empty($id) || empty($enterTime) || empty($leaveTime) || empty($guest)) {
+            throw new ParamNotFoundException();
+        }
+        $hotel = $this->hotelRoomModel->find($id);
+        if (empty($hotel)) {
+            $this->error("房间不存在");
+        }
+        if ($enterTime - $leaveTime > -84600) {
+            $this->error("预定的住房时间不正常");
+        }
+        if (count($guest) < 1) {
+            $this->error("住客信息未添加");
+        }
+        $used = $this->hotelOrderModel
+            ->where("endtime", ">", $enterTime)
+            ->where("roomid", "=", $id)
+            ->count();
+        if ($hotel->total <= $used) {
+            $this->error("该房型已全部预约");
+        }
+        Db::startTrans();
+        $rate = 1;
+        if (!empty($couponReceiveId)) {
+            $receive = $this->user->hotelCouponReceive()->with("coupon")->find($couponReceiveId);
+            if (empty($receive)) {
+                $this->error("优惠券不合格");
+            }
+            if ($receive->status != 0) {
+                $this->error("优惠券已使用");
+            }
+            $result = $receive->isUpdate()->save([
+                "status" => 1
+            ]);
+            $rate = $receive->coupon->rate;
+            if ($result === false) {
+                $this->error("服务器异常1");
+            }
+        }
+        $day = round(($leaveTime - $enterTime) / 84600);
+        $oprice = bcmul($hotel->price, $day);
+        $price = bcmul($oprice, $rate);
+        $money = bcsub($this->user->money, $price);
+        if (bcsub($this->user->money, $price) < 0) {
+            $this->error("余额不足，请先充值");
+        }
+        $result = $this->user->isUpdate()->save([
+            "money" => $money
+        ]);
+        if ($result === false) {
+            $this->error('服务器异常3');
+        }
+
+        $result = $this->hotelOrderModel->save([
+            "busid" => $this->user->id,
+            "roomid" => $hotel->id,
+            "orgin_price" => $oprice,
+            "price" => $price,
+            "starttime" => $enterTime,
+            "endtime" => $leaveTime,
+            "status" => 1,
+            "coupon_receive_id" => $couponReceiveId
+        ]);
+        if ($result === false) {
+            $this->error("服务器异常2");
+        }
+        $orderId = $this->hotelOrderModel->id;
+        $this->hotelOrderGuest->allowField(true)->saveAll(
+            array_map(function ($guestid) use ($orderId) {
+                $guestRecord = $this->hotelGuestModel->find($guestid);;
+                $rrr["busid"] = $guestRecord->busid;
+                $rrr["nickname"] = $guestRecord->nickname;
+                $rrr["mobile"] = $guestRecord->mobile;
+                $rrr["sex"] = $guestRecord->sex;
+                $rrr["orderid"] = $orderId;
+                return $rrr;
+            }, $guest)
+        );
+        Db::commit();
+        $this->success("订单支付成功", $orderId);
+
+//        $result = $this->hotelOrderModel->save([
+//            "busid" => $this->user->id,
+//            "roomid" => $hotel->id,
+//            "orgin_price" => $oprice,
+//            "price" => $price,
+//            "starttime" => $enterTime,
+//            "endtime" => $leaveTime,
+//            "status" => 0,
+//            "coupon_receive_id" => $couponReceiveId
+//        ]);
+//        if ($result === false) {
+//            $this->error("服务器异常2");
+//        }
+//        Db::commit();
+//        $this->success("订单创建成功", $this->hotelOrderModel->id);
+
+    }
+
+    /**
+     * 酒店订单信息
+     */
+    public function order_detail($id)
+    {
+        if (empty($id)) {
+            throw new ParamNotFoundException();
+        }
+        $order = $this->user->hotelOrders()->with(["room", "coupon_receive" => fn($q) => $q->with(["coupon"])])->find($id);
+        if (empty($order)) {
+            $this->error("订单不存在");
+        }
+        $order->code = substr(md5($id), 2);
+        $this->success("", $order);
+    }
+
+    /**
+     * 酒店订单信息列表
+     */
+    public function order_list($page = 1, $status = null)
+    {
+        $where = [];
+        if (!empty($status)) {
+            $where['status'] = $status;
+        }
+        $result["list"] = $this->user
+            ->hotelOrders()
+            ->with(["room", "guests",
+                "coupon_receive" => fn($q) => $q->with(["coupon"])])
+            ->where($where)
+            ->order("createtime desc")
+            ->page($page, 30)
+            ->select();
+        $result["count"] = $this->user
+            ->hotelOrders()
+            ->where($where)
+            ->count();
+        $result["hasMore"] = $page * 30 < $result["count"];
+        $result["page"] = $page + 1;
+        $this->success("", $result);
+    }
+
+
+    /**
+     * 充值
+     * @return mixed
+     */
+    public function recharge()
+    {
+        $money = $this->request->param('money', "", "trim");
+        $payType = $this->request->param('payType', "0", "trim");
+        if ($payType == 'wx') {
+            $payType = "0";
+        }
+        if ($payType == 'zfb') {
+            $payType = "1";
+        }
+        if (empty($money) || $money <= 0) {
+            $this->error("请输入充值金额");
+        }
+        $host = trim(config("site.cdnurl"), "/");
+        $param = [
+            "name" => "充值",
+            "third" => json_encode(["busid" => $this->user->id]),
+            "originalprice" => $money,
+            "paypage" => 0,
+            'paytype' => $payType,
+            "reurl" => $host . "/business/pay_result",
+            "callbackurl" => $host . "/business/callback",
+            "wxcode" => $host . config("site.pay.wx"),
+            "zfbcode" => $host . config("site.pay.zfb")
+        ];
+        $result = httpRequest($host . "/pay/index/create", $param, $error);
+        if (!empty($error)) {
+            $this->error($error);
+        }
+        if (empty($result) && empty($result["code"])) {
+            $this->error(empty($result) ? "服务器异常" : $result["msg"]);
+        }
+        $result = json_decode($result);
+        $this->success("支付订单创建成功", $result->data);
+    }
+
+    /**检测订单状态*/
+    public function status($payid)
+    {
+        $host = trim(config("site.cdnurl"), "/");
+        $response = httpRequest($host . "/pay/index/status", ["payid" => $payid], $error);
+        if (!empty($error)) {
+            $this->error($error);
+        }
+        $result = json_decode($response);
+        if ($result->code) {
+            $this->success("支付成功", 1);
+        }
+        if ($result->msg == "订单未支付") {
+            $this->success("", 0);
+        }
+        $this->error($result->msg);
+        return;
+    }
+
+    /**
+     * 支付跳转
+     */
+    public function pay_result()
+    {
+        $this->success("支付成功", url("/"));
+    }
+
+    /**
+     * 支付回调
+     */
+    public function callback()
+    {
+        $id = $this->request->param("id");
+        $record = model("common/pay/Pay")->find($id);
+        if (empty($record)) {
+            return "1";
+        }
+        $busid = $record->third->buisid;
+        $paytime = $record->paytime;
+        $total = $record->price;
+        $recModel = model("common/business/Record");
+        $record = $recModel
+            ->where("createtime", '=', $paytime)
+            ->where("busid", '=', $busid)
+            ->find();
+        if (!empty($record)) {
+            return "2";
+        }
+        Db::startTrans();
+        $record = $recModel->save([
+            "busid" => $busid,
+            "createtime" => $paytime,
+            "content" => "充值金额",
+            "total" => $total
+        ]);
+        if (empty($record)) {
+            return "3";
+        }
+        $business = $this->business_model()
+            ->where("busid", "=", $busid)->find();
+        $money = bcadd($business->money, $total);
+        $result = $business->isUpdate()->save([
+            "money" => $money
+        ]);
+        if (empty($result)) {
+            return "4";
+        }
+        Db::commit();
+        return "充值完成";
     }
 }

@@ -189,11 +189,6 @@ class Business extends AskController
                 "info" => $business
             ]);
         }
-        $token = randstr() . $business->id;
-        $this->token($token, $business);
-        unset($business['salt']);
-        unset($business['password']);
-        $business->setAttr("token", $token);
         $this->success('授权成功，请绑定账号', [
             "info" => $business,
             "redirect" => "/pages/business/login",

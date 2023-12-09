@@ -9,7 +9,7 @@ use think\Db;
 class Index extends AskController
 {
 
-    protected $noNeedLogin = ['index', 'coupon_info', 'getRoomList', 'index_list'];
+    protected $noNeedLogin = ['index', 'coupon_info', 'hotel_detail', 'index_list'];
     protected $payModel = null;
     protected $hotelCouponModel = null;
     protected $hotelCouponReceiveModel = null;
@@ -165,10 +165,15 @@ class Index extends AskController
         $result["detail"] = $record;
 //      优惠券信息
         $result["coupon"] = [];
+        if (!empty($this->user)) {
+            $result["coupon"] = $this->user
+                ->hotelCouponReceive()
+                ->with("coupon")
+                ->where("status", "0")
+                ->select();
+        }
 //        评价信息
         $result["comment"] = [];
-//        设备信息
-        $result["equipment"] = [];
         $this->success("", $result);
     }
 }

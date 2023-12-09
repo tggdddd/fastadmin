@@ -213,7 +213,7 @@ class Order extends ShopController
             "total" => $record->amount,
             "content" => "购买了" . trim(array_reduce(
                     array_map(fn($pr) => "【" . $pr->product->name . "】", $record->products),
-                    fn($a, $b) => $a . "、" . $b), "、")
+                    fn($a, $b) => $a . "," . $b), ",")
         ]);
         if ($result === false) {
             $this->error("服务器异常");

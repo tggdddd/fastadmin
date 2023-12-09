@@ -31,7 +31,7 @@ class CouponReceive extends Model
 
     public function statusList()
     {
-        return ['0' => '可使用', '1' => '已过期', '2' => '已使用', '3' => '未开始'];
+        return ['0' => '可使用', '1' => '已使用', '2' => '已过期', '3' => '未开始'];
     }
 
     public function coupon()

@@ -153,4 +153,12 @@ class Business extends Model
     {
         return $this->hasMany('app\common\model\hotel\CouponReceive', "busid", "id");
     }
+
+    /**
+     * 酒店订单
+     */
+    public function hotelOrders()
+    {
+        return $this->hasMany('app\common\model\hotel\Order', "busid", "id");
+    }
 }
