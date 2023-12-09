@@ -11,7 +11,7 @@ use think\Db;
 class Business extends AskController
 {
 
-    protected $noNeedLogin = ['login', 'bind', 'web', 'userInfo', 'star', 'follow'];
+    protected $noNeedLogin = ['login', 'bind', 'web', 'userInfo', 'user_info_collection', 'user_info_answer', 'user_info_post', 'star', 'follow'];
     protected $payModel = null;
     protected $postModel = null;
 
