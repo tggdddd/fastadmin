@@ -21,26 +21,30 @@ function randstr($len = 10, $special = false)
     }
 
     $charsLen = count($chars) - 1;
-    shuffle($chars);                            //打乱数组顺序
+    shuffle($chars);//打乱数组顺序
     $str = '';
     for ($i = 0; $i < $len; $i++) {
-        $str .= $chars[mt_rand(0, $charsLen)];    //随机取出一位
+        $str .= $chars[mt_rand(0, $charsLen)];//随机取出一位
     }
     return $str;
 }
 
-function upload($data)
+function upload($data, $date = "20231207")
 {
     $md5 = md5(randstr(32));
-    $file = "D:\\project\php\\fastadmin\\public\\uploads\\20231207\\$md5.jpg";
+    $path = "D:\\project\php\\fastadmin\\public\\uploads\\$date";
+    if (!file_exists($path)) {
+        mkdir($path, "0777", true);
+    }
+    $file = "D:\\project\php\\fastadmin\\public\\uploads\\$date\\$md5.jpg";
     file_put_contents($file, $data);
-    return str_replace("\\", "/", "\\uploads\\20231207\\$md5.jpg");
+    return str_replace("\\", "/", "\\uploads\\$date\\$md5.jpg");
 }
 
 function matchAndReplace($str)
 {
     preg_match_all("/(https?:\\/\\/.*?\\.(?:png|jpg|jpeg))/i", $str, $match, PREG_PATTERN_ORDER);
-//    preg_match_all("/(\\/\\/img.alicdn.com.*?\\.(?:png|jpg|jpeg))/i", $str, $match,PREG_PATTERN_ORDER);
+//preg_match_all("/(\\/\\/img.alicdn.com.*?\\.(?:png|jpg|jpeg))/i", $str, $match,PREG_PATTERN_ORDER);
     if (!empty($match[1]) && count($match[1]) > 0) {
         $len = count($match[1]);
         for ($i = 0; $i < $len; $i++) {
@@ -68,7 +72,7 @@ function query()
 
 //query();
 
-function main()
+function avatar()
 {
     $avatar = [
         "https://c-ssl.dtstatic.com/uploads/blog/202201/23/20220123222213_2899a.thumb.400_0.jpeg",
@@ -108,9 +112,50 @@ function main()
     while ($id <= 43) {
         $img = upload(file_get_contents($avatar[$i]));
         AutoCRUD::update_sql("update cs_business set avatar = ? where id = ?", $img, $id);
-        $i = floor(++$i / $len);
+        $i = floor(++$i % $len);
         $id++;
     }
 }
 
-main();
+//hotel();
+function c()
+{
+    $content = file_get_contents("hotel.txt");
+    $list = explode("\r\n", $content);
+    foreach ($list as $url) {
+        $url = "https:" . $url;
+        echo $url . PHP_EOL;
+        $data = file_get_contents($url);
+        upload($data, "20231210");
+    }
+}
+
+function hotelGetUploadPath($name)
+{
+    return "/uploads/20231210/" . $name;
+}
+
+function getSavePath(&$id, $list)
+{
+    while ($list[$id] == "." || $list[$id] == ".." || $list[$id] == "...") {
+        $id = ++$id % count($list);
+    }
+    $url = hotelGetUploadPath($list[$id]);
+    $id = ++$id % count($list);
+    return $url;
+}
+
+function hotel()
+{
+    $path = "D:\\project\php\\fastadmin\\public\\uploads\\20231210";
+    $list = scandir($path);
+    $id = 50;
+    $i = 0;
+    while ($id <= 79) {
+        $img = getSavePath($i, $list);
+        AutoCRUD::update_sql("update cs_hotel_room set thumb = ? where id = ?", $img, $id);
+        $id++;
+    }
+}
+
+hotel();
