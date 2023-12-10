@@ -608,4 +608,33 @@ class Business extends AskController
         Db::commit();
         return "充值完成";
     }
+
+    /**
+     * 获取订单数量
+     */
+
+    public function orderNumbers()
+    {
+        $total = $this->hotelOrderModel
+            ->where("busid", "=", $this->user->id)
+            ->count();
+        $unCommentTotal = $this->hotelOrderModel
+            ->where("busid", "=", $this->user->id)
+            ->where("status", "<", 4)
+            ->where("status", ">", 0)
+            ->count();
+        $unpaid = $this->hotelOrderModel
+            ->where("busid", "=", $this->user->id)
+            ->where("status", "=", 0)
+            ->count();
+        $uncomment = $this->hotelOrderModel
+            ->where("busid", "=", $this->user->id)
+            ->where("status", "=", 4)
+            ->count();
+
+        $result["unPaid"] = $unpaid;
+        $result["unComment"] = $unCommentTotal;
+        $result["paid"] = $total - $unpaid;
+        $this->success("", $result);
+    }
 }
