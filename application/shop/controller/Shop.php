@@ -14,7 +14,7 @@ use function model;
  */
 class Shop extends ShopController
 {
-    protected $noNeedLogin = ['index', 'category', 'shop_detail', 'login', 'register'];
+    protected $noNeedLogin = ['index', 'category', 'category_list', 'shop_detail', 'login', 'register'];
     protected ?\app\common\model\product\Product $product_model = null;
     protected ?\app\common\model\product\Type $product_type_model = null;
     protected ?\app\common\model\business\Address $address_model = null;
