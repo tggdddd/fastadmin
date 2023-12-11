@@ -336,20 +336,24 @@ class Business extends AskController
             'offset' => 20
         ];
         $result['answer'] = [
-            'count' => $business->askPostComments()->where("content", "like", "%$searchValue%")
+            'count' => $business->askPostComments()
+                ->where(function ($q) use ($searchValue) {
+                    $q->where("content", "like", "%$searchValue%")
                 ->whereOr("postid", "in", $this->postModel->where("title|content", "like", "%$searchValue%")
                     ->whereOr("busid", "in",
                         $this->business_model
                             ->whereLike("nickname", "%$searchValue%")
-                            ->column("id"))->column("id"))
+                            ->column("id"))->column("id"));
+                })
                 ->count(),
-            'list' => $business->askPostComments()->where("content", "like", "%$searchValue%")
-                ->whereOr("postid", "in", $this->postModel
-                    ->where("title|content", "like", "%$searchValue%")
-                    ->whereOr("busid", "in",
-                        $this->business_model
-                            ->whereLike("nickname", "%$searchValue%")
-                            ->column("id"))->column("id"))
+            'list' => $business->askPostComments()->where(function ($q) use ($searchValue) {
+                $q->where("content", "like", "%$searchValue%")
+                    ->whereOr("postid", "in", $this->postModel->where("title|content", "like", "%$searchValue%")
+                        ->whereOr("busid", "in",
+                            $this->business_model
+                                ->whereLike("nickname", "%$searchValue%")
+                                ->column("id"))->column("id"));
+            })
                 ->order(["createtime" => "desc"])
                 ->limit(20)->select(),
             'offset' => 20
@@ -413,21 +417,25 @@ class Business extends AskController
         $model = model("common/post/Comment");
         $result["list"] = $model
             ->where("busid", "=", $busid)
-            ->where("content", "like", "%$searchValue%")
-            ->whereOr("postid", "in", $this->postModel->where("title|content", "like", "%$searchValue%")
-                ->whereOr("busid", "in",
-                    $this->business_model
-                        ->whereLike("nickname", "%$searchValue%")
-                        ->column("id"))->column("id"))
+            ->where(function ($q) use ($searchValue) {
+                $q->where("content", "like", "%$searchValue%")
+                    ->whereOr("postid", "in", $this->postModel->where("title|content", "like", "%$searchValue%")
+                        ->whereOr("busid", "in",
+                            $this->business_model
+                                ->whereLike("nickname", "%$searchValue%")
+                                ->column("id"))->column("id"));
+            })
             ->order(["createtime" => "desc"])
             ->limit($offset, 20)->select();
         $result["count"] = $model->where("busid", "=", $busid)
-            ->where("content", "like", "%$searchValue%")
-            ->whereOr("postid", "in", $this->postModel->where("title|content", "like", "%$searchValue%")
-                ->whereOr("busid", "in",
-                    $this->business_model
-                        ->whereLike("nickname", "%$searchValue%")
-                        ->column("id"))->column("id"))
+            ->where(function ($q) use ($searchValue) {
+                $q->where("content", "like", "%$searchValue%")
+                    ->whereOr("postid", "in", $this->postModel->where("title|content", "like", "%$searchValue%")
+                        ->whereOr("busid", "in",
+                            $this->business_model
+                                ->whereLike("nickname", "%$searchValue%")
+                                ->column("id"))->column("id"));
+            })
             ->count();
         $result["offset"] = $offset + 20;
         $this->success("", $result);
