@@ -638,23 +638,23 @@ class Business extends AskController
     public function letter_list($offset = 0, $searchValue = "")
     {
 
-        $list = $this->user
-            ->askReceiveLetter()
-            ->with("from_user")
-            ->where(fn($q) => $q->whereOr("content", "like", "%$searchValue%")
-                ->where("from_user_id", "in", $this->business_model
-                    ->whereLike("nickname", "%$searchValue%")
-                    ->column("id")))
-            ->order(["status" => "asc", "createtime" => "desc"])
-            ->limit($offset, 30)
-            ->select();
+//        $list = $this->user
+//            ->askReceiveLetter()
+//            ->with("from_user")
+//            ->where(fn($q) => $q->whereOr("content", "like", "%$searchValue%")
+//                ->where("from_user_id", "in", $this->business_model
+//                    ->whereLike("nickname", "%$searchValue%")
+//                    ->column("id")))
+//            ->order(["status" => "asc", "createtime" => "desc"])
+//            ->limit($offset, 30)
+//            ->select();
 
 
         $list = $this->user
             ->askReceiveLetter()
             ->with("from_user")
             ->where(fn($q) => $q->whereOr("content", "like", "%$searchValue%")
-                ->where("from_user_id", "in", $this->business_model
+                ->whereOr("from_user_id", "in", $this->business_model
                     ->whereLike("nickname", "%$searchValue%")
                     ->column("id")))
             ->order(["status" => "asc", "createtime" => "desc"])
@@ -666,7 +666,7 @@ class Business extends AskController
             ->askReceiveLetter()
             ->with("from_user")
             ->where(fn($q) => $q->whereOr("content", "like", "%$searchValue%")
-                ->where("from_user_id", "in", $this->business_model
+                ->whereOr("from_user_id", "in", $this->business_model
                     ->whereLike("nickname", "%$searchValue%")
                     ->column("id")))
             ->count();
@@ -699,7 +699,6 @@ class Business extends AskController
         $result = $result->isUpdate()->save();
         $this->success("操作成功", !empty($result));
     }
-
 
     /**
      * 充值
@@ -741,7 +740,9 @@ class Business extends AskController
         $this->success("支付订单创建成功", $result->data);
     }
 
-    /**检测订单状态*/
+    /**
+     * 检测订单状态
+     */
     public function status($payid)
     {
         $host = trim(config("site.cdnurl"), "/");
