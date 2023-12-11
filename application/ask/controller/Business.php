@@ -517,7 +517,9 @@ class Business extends AskController
      */
     public function collect_del($postid)
     {
-        $delete = $this->user->askPostCollections()->delete($postid);
+        $delete = $this->user->askPostCollections()
+            ->where("postid", "=", $postid)
+            ->delete();
         if (empty($delete)) {
             $this->error("未收藏该帖子");
         }
