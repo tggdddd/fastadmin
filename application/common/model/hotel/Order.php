@@ -15,6 +15,7 @@ class Order extends Model
         'createtime_text',
         'endtime_text',
         'starttime_text',
+        "status_text"
     ];
     public function getStatusTextAttr($val, $data)
     {
@@ -65,12 +66,12 @@ class Order extends Model
 
     public function room()
     {
-        return $this->hasOne("app\common\model\hotel\Room", "id", "roomid");
+        return $this->hasOne("app\common\model\hotel\Room", "id", "roomid")->setEagerlyType(0);
     }
 
     public function business()
     {
-        return $this->hasOne("app\common\model\business\Business", "id", "busid");
+        return $this->hasOne("app\common\model\business\Business", "id", "busid")->setEagerlyType(0);
     }
 
     public function guests()

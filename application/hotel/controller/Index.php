@@ -162,6 +162,11 @@ class Index extends AskController
         }
 //        酒店信息
         $record = $this->hotelRoomModel->find($id);
+        $used = $this->hotelOrderModel
+            ->where("endtime", ">", time())
+            ->where("roomid", "=", $id)
+            ->count();
+        $record->total = $record->total - $used;
         $result["detail"] = $record;
 //      优惠券信息
         $result["coupon"] = [];

@@ -14,11 +14,11 @@ class Collect extends Model
 
     public function room()
     {
-        return $this->hasOne("app\common\model\hotel\Room", "id", "room_id");
+        return $this->hasOne("app\common\model\hotel\Room", "id", "room_id")->setEagerlyType(0);
     }
 
     public function business()
     {
-        return $this->hasOne("app\common\model\business\Business", "busid", "id");
+        return $this->hasOne("app\common\model\business\Business", "busid", "id")->setEagerlyType(0);
     }
 }

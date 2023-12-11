@@ -323,7 +323,7 @@ class Business extends AskController
                 $r["collect"] = 1;
                 return $r;
             }, $list);
-        $result["count"] = $this->user->hotelGuest()->count();
+        $result["count"] = $this->user->hotelCollect()->count();
         $result["hasMore"] = $page * 30 < $result["count"];
         $result["page"] = $page + 1;
         $this->success("", $result);
@@ -456,6 +456,23 @@ class Business extends AskController
     }
 
     /**
+     * 取消订单
+     */
+    public function order_cancel($id)
+    {
+        if (empty($id)) {
+            $this->error("参数不正常");
+        }
+        $order = $this->user->hotelOrders()->find($id);
+        if (empty($order)) {
+            $this->error("订单不存在");
+        }
+//        if($order->starttime<$order->)
+//        $order->isUpdate()->save([
+//            "status"=>
+//        ])
+    }
+    /**
      * 酒店订单信息
      */
     public function order_detail($id)
@@ -483,7 +500,9 @@ class Business extends AskController
         $result["list"] = $this->user
             ->hotelOrders()
             ->with(["room", "guests",
-                "coupon_receive" => fn($q) => $q->with(["coupon"])])
+                "coupon_receive" => function ($q) {
+                    $q->with(["coupon"]);
+                }])
             ->where($where)
             ->order("createtime desc")
             ->page($page, 30)
@@ -496,7 +515,6 @@ class Business extends AskController
         $result["page"] = $page + 1;
         $this->success("", $result);
     }
-
 
     /**
      * 充值
@@ -538,7 +556,9 @@ class Business extends AskController
         $this->success("支付订单创建成功", $result->data);
     }
 
-    /**检测订单状态*/
+    /**
+     * 检测订单状态
+     */
     public function status($payid)
     {
         $host = trim(config("site.cdnurl"), "/");
@@ -637,4 +657,5 @@ class Business extends AskController
         $result["paid"] = $total - $unpaid;
         $this->success("", $result);
     }
+
 }
