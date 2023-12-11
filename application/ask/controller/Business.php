@@ -487,9 +487,9 @@ class Business extends AskController
     /**
      * 评论删除
      */
-    public function comment_del($id)
+    public function comment_del($comid)
     {
-        $delete = $this->user->askPostComments()->delete($id);
+        $delete = $this->user->askPostComments()->delete($comid);
         if (empty($delete)) {
             $this->error("评论不存在");
         }
@@ -637,19 +637,6 @@ class Business extends AskController
      */
     public function letter_list($offset = 0, $searchValue = "")
     {
-
-//        $list = $this->user
-//            ->askReceiveLetter()
-//            ->with("from_user")
-//            ->where(fn($q) => $q->whereOr("content", "like", "%$searchValue%")
-//                ->where("from_user_id", "in", $this->business_model
-//                    ->whereLike("nickname", "%$searchValue%")
-//                    ->column("id")))
-//            ->order(["status" => "asc", "createtime" => "desc"])
-//            ->limit($offset, 30)
-//            ->select();
-
-
         $list = $this->user
             ->askReceiveLetter()
             ->with("from_user")
