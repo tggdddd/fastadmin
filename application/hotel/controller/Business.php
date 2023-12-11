@@ -467,11 +467,34 @@ class Business extends AskController
         if (empty($order)) {
             $this->error("订单不存在");
         }
-//        if($order->starttime<$order->)
-//        $order->isUpdate()->save([
-//            "status"=>
-//        ])
+        if ($order->starttime > time()) {
+            $this->error("无法取消该订单，请选择申请退款");
+        }
+        Db::startTrans();
+        $money = bcadd($this->user->money, $order->price);
+        $result = $this->user->isUpdate()->save(["money" => $money]);
+        if ($result === false) {
+            $this->error("服务器异常1");
+        }
+        $result = $order->delete();
+        if ($result === false) {
+            $this->error("服务器异常2");
+        }
+        Db::commit();
+        $this->success("订单已取消");
     }
+
+    /**
+     * 申请退款
+     */
+    public function refund($id)
+    {
+        if (empty($id)) {
+            $this->error("参数不正常");
+        }
+//        todo 待完成
+    }
+
     /**
      * 酒店订单信息
      */
@@ -658,4 +681,32 @@ class Business extends AskController
         $this->success("", $result);
     }
 
+    /**
+     * 评论订单
+     */
+    public function comment_order($id, $rate, $content)
+    {
+        if (empty($id)) {
+            throw new ParamNotFoundException("id");
+        }
+        if (empty($rate)) {
+            throw new ParamNotFoundException("评分");
+        }
+        if (empty($content)) {
+            throw new ParamNotFoundException("内容");
+        }
+        $order = $this->user->hotelOrders()->find($id);
+        if (empty($order)) {
+            $this->error("订单不能为空");
+        }
+        if ($order->status == "4") {
+            $this->error("订单已评价");
+        }
+        $result = $order->isUpdate()->save([
+            "comment" => $content,
+            "comment_rate" => $rate,
+            "status" => 4
+        ]);
+        $this->success("评论成功");
+    }
 }
