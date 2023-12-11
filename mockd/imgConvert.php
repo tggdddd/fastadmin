@@ -43,15 +43,15 @@ function upload($data, $date = "20231207")
 
 function matchAndReplace($str)
 {
-    preg_match_all("/(\\/https:\\/\\/jackr.cn)/i", $str, $match, PREG_PATTERN_ORDER);
+    preg_match_all("/\"(\\/uploads\\/2023.*?\\.jpg)/i", $str, $match, PREG_PATTERN_ORDER);
 //preg_match_all("/(\\/\\/im g.alicdn.com.*?\\.(?:png|jpg|jpeg))/i", $str, $match,PREG_PATTERN_ORDER);
     if (!empty($match[1]) && count($match[1]) > 0) {
         $len = count($match[1]);
         for ($i = 0; $i < $len; $i++) {
             $src = $match[1][$i];
 //            $data = file_get_contents($src);
-//            $path = upload($data);
-            $path = substr($src, 1) . "/";
+            $path = "https://jackr.cn$src";
+//            $path = substr($src, 1) . "/";
             $str = str_replace($src, $path, $str);
         }
     }
