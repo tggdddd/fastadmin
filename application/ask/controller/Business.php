@@ -495,9 +495,17 @@ class Business extends AskController
     /**
      * 评论删除
      */
-    public function comment_del($comid)
+    public function comment_del()
     {
-        $delete = $this->user->askPostComments()->delete($comid);
+        $id = $this->request->param("comid");
+        if (empty($id)) {
+            $id = $this->request->param("id");
+        }
+        if (empty($id)) {
+            $this->error("参数错误");
+        }
+
+        $delete = $this->user->askPostComments()->delete($id);
         if (empty($delete)) {
             $this->error("评论不存在");
         }
